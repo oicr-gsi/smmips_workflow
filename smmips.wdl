@@ -24,7 +24,7 @@ workflow smmips {
     Int? max_depth
     Boolean? ignore_orphans
     String reference_name
-    String cosmic
+    File cosmicfile
 }
 
 
@@ -51,7 +51,7 @@ workflow smmips {
     truncate: "Only pileup columns in the exact region specificied are returned. Default is False"
     stepper: "Filter or include reads in the pileup. See pysam doc for behavior of the all or nofilter options. Default is nofilter"
     reference_name: "Reference genome. Must be the same reference used in panel. Accepted values: 37 or 38"
-    cosmic: "Tab separated table of all COSMIC coding point mutations from targeted and genome wide screens"
+    cosmicfile: "Tab separated table of all COSMIC coding point mutations from targeted and genome wide screens"
 }
 
   meta {
@@ -94,7 +94,7 @@ workflow smmips {
       stepper = stepper,
       max_depth = max_depth,
       reference_name = reference_name,
-      cosmic = cosmic
+      cosmicfile = cosmicfile
   }
 
   File count_table = count_variants.count_table
@@ -126,7 +126,7 @@ task count_variants {
     String? stepper
     Int? max_depth
     String reference_name
-    String cosmic
+    File cosmicfile
     Int memory = 32
   }
 
@@ -210,7 +210,7 @@ task count_variants {
     String? stepper
     Int? max_depth
     String reference_name
-    String cosmic
+    File cosmicfile
     Int memory = 32
   }
 
