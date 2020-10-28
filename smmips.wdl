@@ -61,40 +61,40 @@ workflow smmips {
   }
 
   call assign_smmips {
-  input:
-    fastq1 = fastq1
-    fastq2 = fastq2
-    panel = panel
-    reference = reference
-    outdir = outdir    
-    bwa = bwa    
-    prefix = prefix  
-    max_subs = max_subs
-    upstream_nucleotides = upstream_nucleotides
-    umi_length = umi_length 
-    match = match
-    mismatch = mismatch
-    gap_opening = gap_opening
-    gap_extension = gap_extension  
-    alignment_overlap_threshold = alignment_overlap_threshold
-    matches_threshold = matches_threshold  
-    remove = remove
+    input:
+      fastq1 = fastq1,
+      fastq2 = fastq2,
+      panel = panel,
+      reference = reference,
+      outdir = outdir,
+      bwa = bwa,    
+      prefix = prefix,  
+      max_subs = max_subs,
+      upstream_nucleotides = upstream_nucleotides,
+      umi_length = umi_length, 
+      match = match,
+      mismatch = mismatch,
+      gap_opening = gap_opening,
+      gap_extension = gap_extension,  
+      alignment_overlap_threshold = alignment_overlap_threshold,
+      matches_threshold = matches_threshold,  
+      remove = remove
   }
 
   File sortedbam = assign_smmips.sortedbam 
 
   call count_variants {
-  input: 
-    sortedbam = sortedbam
-    panel = panel
-    outdir = outdir
-    prefix = prefix  
-    truncate = truncate
-    ignore_orphans = ignore_orphans
-    stepper = stepper
-    max_depth = max_depth
-    reference_name = reference_name
-    cosmic = cosmic
+    input: 
+      sortedbam = sortedbam,
+      panel = panel,
+      outdir = outdir,
+      prefix = prefix,  
+      truncate = truncate,
+      ignore_orphans = ignore_orphans,
+      stepper = stepper,
+      max_depth = max_depth,
+      reference_name = reference_name,
+      cosmic = cosmic
   }
 
   File count_table = count_variants.count_table
