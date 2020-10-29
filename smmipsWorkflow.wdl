@@ -9,23 +9,23 @@ workflow smmipsWorklow {
     String? outdir    
     String bwa    
     String prefix  
-    Int? maxSubs
-    Int? upstreamNucleotides
-    Int? umiLength  
-    Int? match
-    Int? mismatch
-    Float? gapOpening
-    Float? gapExtension  
-    Int? alignmentOverlapThreshold
-    Float? matchesThreshold  
+    Int maxSubs = 0
+    Int upstreamNucleotides = 0
+    Int umiLength = 4  
+    Int match = 2
+    Int mismatch = -1
+    Float gapOpening = -5
+    Float gapExtension   = -1
+    Int alignmentOverlapThreshold = 60
+    Float matchesThreshold = 0.7  
     Boolean? remove
     Boolean? truncate
-    String? stepper
-    Int? maxDepth
+    String stepper = "nofilter"
+    Int maxDepth = 1000000
     Boolean? ignoreOrphans
     String referenceName
     File cosmicFile
-}
+  }
 
 
   parameter_meta {
@@ -52,7 +52,7 @@ workflow smmipsWorklow {
     stepper: "Filter or include reads in the pileup. See pysam doc for behavior of the all or nofilter options. Default is nofilter"
     referenceName: "Reference genome. Must be the same reference used in panel. Accepted values: 37 or 38"
     cosmicFile: "Tab separated table of all COSMIC coding point mutations from targeted and genome wide screens"
-}
+  }
 
   meta {
     author: "Richard Jovelin"
@@ -114,40 +114,6 @@ workflow smmipsWorklow {
 }
 
 
-task countVariants {
-  input {
-    String modules = "smmips/1.0.0"
-    File sortedbam
-    File panel
-    String? outdir
-    String prefix  
-    Boolean? truncate
-    Boolean? ignoreOrphans
-    String? stepper
-    Int? maxDepth
-    String referenceName
-    File cosmicFile
-    Int memory = 32
-  }
-
-  command <<<
-    smmips variant -b ~{sortedbam} -p ~{panel} -m ${default=1000000 maxDepth} \
-    ${if outdir then "-o ~{outdir}" else ""} -stp ${default='nofilter' stepper} \
-    -pf ~{prefix} -rf ~{referenceName} -c ~{cosmicFile} \
-    ${if ignoreOrphans then "-io" else ""} ${if truncate then "-t" else ""}
-  >>>
-
-  runtime {
-    memory:  "~{memory} GB"
-    modules: "~{modules}"
-  }
-
-  output {
-  File countTable = "${outdir}/out/${prefix}_Variant_Counts.txt"
-  }
-}
-
-
 task assignSmmips {
   input {
     String modules = "smmips/1.0.0"
@@ -159,23 +125,23 @@ task assignSmmips {
     String? outdir    
     String bwa    
     String prefix  
-    Int? maxSubs
-    Int? upstreamNucleotides
-    Int? umiLength  
-    Int? match
-    Int? mismatch
-    Float? gapOpening
-    Float? gapExtension  
-    Int? alignmentOverlapThreshold
-    Float? matchesThreshold  
+    Int maxSubs = 0
+    Int upstreamNucleotides = 0
+    Int umiLength = 4 
+    Int match = 2
+    Int mismatch = -1
+    Float gapOpening = -5
+    Float gapExtension = -1  
+    Int alignmentOverlapThreshold = 60
+    Float matchesThreshold = 0.7  
     Boolean? remove
   }
 
   command <<<
     smmips assign -f1 ~{fastq1} -f2 ~{fastq2} -pa ~{panel} -r ~{reference} \
-    -pf ~{prefix} -s ${default=0 max_subs} -up ${default=0 upstreamNucleotides} -umi ${default=4 umiLength} \ 
-    -m ${default=2 match} -mm ${default=-1 mismatch} -go ${default=-5 gapOpening} -ge ${default=-1 gapExtension} \
-    -ao ${default=60 alignmentOverlap} -mt ${default=0.7 matchesThreshold} ${if remove then "--remove" else ""} \
+    -pf ~{prefix} -s ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength} \ 
+    -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension} \
+    -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} ${if remove then "--remove" else ""} \
     ${if outdir then "-o ~{outdir}" else ""} -bwa ~{bwa}
   >>>
 
@@ -198,7 +164,7 @@ task assignSmmips {
 }
 
 
-task count_variants {
+task countVariants {
   input {
     String modules = "smmips/1.0.0"
     File sortedbam
@@ -207,16 +173,16 @@ task count_variants {
     String prefix  
     Boolean? truncate
     Boolean? ignoreOrphans
-    String? stepper
-    Int? maxDepth
+    String stepper = "nofilter"
+    Int maxDepth = 1000000
     String referenceName
     File cosmicFile
     Int memory = 32
   }
 
   command <<<
-    smmips variant -b ~{sortedbam} -p ~{panel} -m ${default=1000000 maxDepth} \
-    ${if outdir then "-o ~{outdir}" else ""} -stp ${default='nofilter' stepper} \
+    smmips variant -b ~{sortedbam} -p ~{panel} -m ~{maxDepth} \
+    ${if outdir then "-o ~{outdir}" else ""} -stp ~{stepper} \
     -pf ~{prefix} -rf ~{referenceName} -c ~{cosmicFile} \
     ${if ignoreOrphans then "-io" else ""} ${if truncate then "-t" else ""}
   >>>
