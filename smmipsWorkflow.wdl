@@ -6,7 +6,7 @@ workflow smmipsWorkflow {
     File fastq2
     File panel
     File reference
-    String? outdir    
+    String outdir = "./"    
     String bwa    
     String prefix  
     Int maxSubs = 0
@@ -120,7 +120,7 @@ task assignSmmips {
     File fastq2
     File panel
     File reference
-    String? outdir    
+    String outdir = "./"    
     String bwa    
     String prefix  
     Int maxSubs = 0
@@ -139,8 +139,8 @@ task assignSmmips {
     smmips assign -f1 ~{fastq1} -f2 ~{fastq2} -pa ~{panel} -r ~{reference} \
     -pf ~{prefix} -s ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength} \ 
     -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension} \
-    -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} ${if remove then "--remove" else ""} \
-    ${if outdir then "-o ~{outdir}" else ""} -bwa ~{bwa}
+    -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} -o ~{outdir} -bwa ~{bwa} \ 
+    ${if remove then "--remove" else ""}
   >>>
 
   runtime {
@@ -167,7 +167,7 @@ task countVariants {
     String modules = "smmips/1.0.0"
     File sortedbam
     File panel
-    String? outdir
+    String outdir = "./"
     String prefix  
     Boolean? truncate
     Boolean? ignoreOrphans
