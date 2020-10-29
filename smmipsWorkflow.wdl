@@ -1,6 +1,6 @@
 version 1.0
 
-workflow smmipsWorklow {
+workflow smmipsWorkflow {
   input {
     File fastq1
     File fastq2
@@ -81,11 +81,11 @@ workflow smmipsWorklow {
       remove = remove
   }
 
-  File sortedbam = assignSmmips.sortedbam 
+  #File sortedbam = assignSmmips.sortedbam 
 
   call countVariants {
     input: 
-      sortedbam = sortedbam,
+      sortedbam = assignSmmips.sortedbam,
       panel = panel,
       outdir = outdir,
       prefix = prefix,  
@@ -97,8 +97,6 @@ workflow smmipsWorklow {
       cosmicFile = cosmicFile
   }
 
-  File countTable = countVariants.countTable
-  
   output {
     Array[File] statsFiles = assignSmmips.statsFiles
     File sortedbam = assignSmmips.sortedbam
