@@ -23,7 +23,7 @@ workflow smmipsWorkflow {
     String stepper = "nofilter"
     Int maxDepth = 1000000
     Boolean? ignoreOrphans
-    String referenceName
+    String referenceName = "37"
     File cosmicFile
   }
 
@@ -81,11 +81,11 @@ workflow smmipsWorkflow {
       remove = remove
   }
 
-  #File sortedbam = assignSmmips.sortedbam 
+  File sortedbam = assignSmmips.sortedbam 
 
   call countVariants {
     input: 
-      sortedbam = assignSmmips.sortedbam,
+      sortedbam = sortedbam,
       panel = panel,
       outdir = outdir,
       prefix = prefix,  
@@ -98,16 +98,16 @@ workflow smmipsWorkflow {
   }
 
   output {
-    Array[File] statsFiles = assignSmmips.statsFiles
-    File sortedbam = assignSmmips.sortedbam
-    File sortedbamIndex = assignSmmips.sortedbamIndex
-    File assignedBam = assignSmmips.assignedBam
-    File assignedBamIndex = assignSmmips.assignedBamIndex
-    File unassignedBam = assignedSmmips.unassignedBam
-    File unassignedBamIndex = assignedSmmips.unassignedBamIndex
-    File emptyBam = assignedSmmips.emptyBam
-    File emptyBamIndex = assignedSmmips.emptyBamIndex
-    File countTable = countVariants.countTable 
+    Array[File] outputStatsFiles = assignSmmips.statsFiles
+    File outputSortedbam = assignSmmips.sortedbam
+    File outputSortedbamIndex = assignSmmips.sortedbamIndex
+    File outputAssignedBam = assignSmmips.assignedBam
+    File outputAssignedBamIndex = assignSmmips.assignedBamIndex
+    File outputUnassignedBam = assignSmmips.unassignedBam
+    File outputUnassignedBamIndex = assignSmmips.unassignedBamIndex
+    File outputEmptyBam = assignSmmips.emptyBam
+    File outputEmptyBamIndex = assignSmmips.emptyBamIndex
+    File outputCountTable = countVariants.countTable 
   }
 }
 
@@ -173,7 +173,7 @@ task countVariants {
     Boolean? ignoreOrphans
     String stepper = "nofilter"
     Int maxDepth = 1000000
-    String referenceName
+    String referenceName = "37"
     File cosmicFile
     Int memory = 32
   }
