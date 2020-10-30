@@ -82,16 +82,21 @@ workflow smmipsWorkflow {
       remove = removeIntermediate
   }
 
-  File sortedbam = assignSmmips.sortedbam 
+  File assignedBam = assignSmmips.assignedBam 
+  File assignedBamIndex = assignSmmips.assignedBamIndex 
+
+  Boolean truncateColumn = if (defined(truncate)) then true else false
+  Boolean ignoreOrphanReads = if (defined(ignoreOrphans)) then true else false
 
   call countVariants {
     input: 
-      sortedbam = sortedbam,
+      assignedBam = assignedBam,
+      assignedBamIndex = assignedBamIndex,
       panel = panel,
       outdir = outdir,
       prefix = prefix,  
-      truncate = truncate,
-      ignoreOrphans = ignoreOrphans,
+      truncate = truncateColumn,
+      ignoreOrphans = ignoreOrphanReads,
       stepper = stepper,
       maxDepth = maxDepth,
       referenceName = referenceName,
@@ -170,12 +175,13 @@ task assignSmmips {
 task countVariants {
   input {
     String modules = "smmips/1.0.0"
-    File sortedbam
+    File assignedBam
+    File assignedBamIndex
     File panel
     String outdir = "./"
     String prefix  
-    Boolean? truncate
-    Boolean? ignoreOrphans
+    Boolean truncate
+    Boolean ignoreOrphans
     String stepper = "nofilter"
     Int maxDepth = 1000000
     String referenceName = "37"
@@ -183,12 +189,14 @@ task countVariants {
     Int memory = 32
   }
 
+
+  String truncateFlag = if truncate then "-t" else ""  
+  String ignoreOrphansFlag = if ignoreOrphans then "-io" else "" 
+
   command <<<
     set -euo pipefail
-    smmips variant -b ~{sortedbam} -p ~{panel} -m ~{maxDepth} \
-    ${if outdir then "-o ~{outdir}" else ""} -stp ~{stepper} \
-    -pf ~{prefix} -rf ~{referenceName} -c ~{cosmicFile} \
-    ${if ignoreOrphans then "-io" else ""} ${if truncate then "-t" else ""}
+    cp ~{assignedBamIndex} .
+    smmips variant -b ~{assignedBam} -p ~{panel} -m ~{maxDepth} -o ~{outdir} -stp ~{stepper} -pf ~{prefix} -rf ~{referenceName} -c ~{cosmicFile} ~{ignoreOrphansFlag} ~{truncateFlag}
   >>>
 
   runtime {
