@@ -143,6 +143,7 @@ task assignSmmips {
   String removeFlag = if remove then "--remove" else ""
 
   command <<<
+    set -euo pipefail
     smmips assign -f1 ~{fastq1} -f2 ~{fastq2} -pa ~{panel} -r ~{reference} -pf ~{prefix} -s ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength}  -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension}  -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} -o ~{outdir} -bwa ~{bwa} ~{removeFlag}
   >>>
 
@@ -182,6 +183,7 @@ task countVariants {
   }
 
   command <<<
+    set -euo pipefail
     smmips variant -b ~{sortedbam} -p ~{panel} -m ~{maxDepth} \
     ${if outdir then "-o ~{outdir}" else ""} -stp ~{stepper} \
     -pf ~{prefix} -rf ~{referenceName} -c ~{cosmicFile} \
