@@ -5,7 +5,6 @@ workflow smmipsWorkflow {
     File fastq1
     File fastq2
     File panel
-    File reference
     String outdir = "./"    
     String bwa    
     String prefix  
@@ -32,7 +31,6 @@ workflow smmipsWorkflow {
     outdir: "Path to directory where directory structure is created"
     fastq1: "Path to Fastq1"
     fastq2: "Path to Fastq2"
-    reference: "Path to the reference genome"
     prefix: "Prefix used to name the output files"
     remove: "Remove intermediate files if True"
     panel: "Path to file with smMIP information"
@@ -69,7 +67,6 @@ workflow smmipsWorkflow {
       fastq1 = fastq1,
       fastq2 = fastq2,
       panel = panel,
-      reference = reference,
       outdir = outdir,
       bwa = bwa,    
       prefix = prefix,  
@@ -118,12 +115,11 @@ workflow smmipsWorkflow {
 
 task assignSmmips {
   input {
-    String modules = "smmips/1.0.0"
+    String modules = "smmips/1.0.0 hg19-bwa-index/0.7.12"
     Int memory = 32
     File fastq1
     File fastq2
     File panel
-    File reference
     String outdir = "./"    
     String bwa    
     String prefix  
@@ -137,6 +133,9 @@ task assignSmmips {
     Int alignmentOverlapThreshold = 60
     Float matchesThreshold = 0.7  
     Boolean remove
+    String refFasta = "$HG19_BWA_INDEX_ROOT/hg19_random.fa"
+    String refFai = "$HG19_BWA_INDEX_ROOT/hg19_random.fa.fai"
+    String refDict = "$HG19_BWA_INDEX_ROOT/hg19_random.dict"
   }
 
 
@@ -144,7 +143,9 @@ task assignSmmips {
 
   command <<<
     set -euo pipefail
-    smmips assign -f1 ~{fastq1} -f2 ~{fastq2} -pa ~{panel} -r ~{reference} -pf ~{prefix} -s ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength}  -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension}  -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} -o ~{outdir} -bwa ~{bwa} ~{removeFlag}
+    cp ~{refFai} .
+    cp ~{refDict} .
+    smmips assign -f1 ~{fastq1} -f2 ~{fastq2} -pa ~{panel} -r ~{refFasta} -pf ~{prefix} -s ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength}  -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension}  -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} -o ~{outdir} -bwa ~{bwa} ~{removeFlag}
   >>>
 
   runtime {
@@ -156,12 +157,12 @@ task assignSmmips {
   Array[File] statsFiles = glob("${outdir}/stats/*.json")
   File sortedbam = "${outdir}/out/${prefix}.sorted.bam"
   File sortedbamIndex = "${outdir}/out/${prefix}.sorted.bam.bai"
-  File assignedBam = "${outdir}/out/${prefix}.assigned_reads.bam"
-  File assignedBamIndex = "${outdir}/out/${prefix}.assigned_reads.bam.bai"
-  File unassignedBam = "${outdir}/out/${prefix}.unassigned_reads.bam"
-  File unassignedBamIndex = "${outdir}/out/${prefix}.unassigned_reads.bam.bai"
-  File emptyBam = "${outdir}/out/${prefix}.empty_reads.bam"
-  File emptyBamIndex = "${outdir}/out/${prefix}.empty_reads.bam.bai"
+  File assignedBam = "${outdir}/out/${prefix}.assigned_reads.sorted.bam"
+  File assignedBamIndex = "${outdir}/out/${prefix}.assigned_reads.sorted.bam.bai"
+  File unassignedBam = "${outdir}/out/${prefix}.unassigned_reads.sorted.bam"
+  File unassignedBamIndex = "${outdir}/out/${prefix}.unassigned_reads.sorted.bam.bai"
+  File emptyBam = "${outdir}/out/${prefix}.empty_reads.sorted.bam"
+  File emptyBamIndex = "${outdir}/out/${prefix}.empty_reads.sorted.bam.bai"
   }
 }
 
