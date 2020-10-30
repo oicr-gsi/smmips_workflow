@@ -60,6 +60,10 @@ workflow smmipsWorkflow {
     description: "Analysis of smMIP libraries"
   }
 
+
+  Boolean removeIntermediate = if (defined(remove)) then true else false
+
+
   call assignSmmips {
     input:
       fastq1 = fastq1,
@@ -77,8 +81,8 @@ workflow smmipsWorkflow {
       gapOpening = gapOpening,
       gapExtension = gapExtension,  
       alignmentOverlapThreshold = alignmentOverlapThreshold,
-      matchesThreshold = matchesThreshold,  
-      remove = remove
+      matchesThreshold = matchesThreshold,
+      remove = removeIntermediate
   }
 
   File sortedbam = assignSmmips.sortedbam 
@@ -132,15 +136,14 @@ task assignSmmips {
     Float gapExtension = -1  
     Int alignmentOverlapThreshold = 60
     Float matchesThreshold = 0.7  
-    Boolean? remove
+    Boolean remove
   }
 
+
+  String removeFlag = if remove then "--remove" else ""
+
   command <<<
-    smmips assign -f1 ~{fastq1} -f2 ~{fastq2} -pa ~{panel} -r ~{reference} \
-    -pf ~{prefix} -s ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength} \ 
-    -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension} \
-    -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} -o ~{outdir} -bwa ~{bwa} \ 
-    ${if remove then "--remove" else ""}
+    smmips assign -f1 ~{fastq1} -f2 ~{fastq2} -pa ~{panel} -r ~{reference} -pf ~{prefix} -s ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength}  -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension}  -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} -o ~{outdir} -bwa ~{bwa} ~{removeFlag}
   >>>
 
   runtime {
