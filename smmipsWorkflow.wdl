@@ -17,11 +17,11 @@ workflow smmipsWorkflow {
     Float gapExtension   = -1
     Int alignmentOverlapThreshold = 60
     Float matchesThreshold = 0.7  
-    Boolean? remove
-    Boolean? truncate
+    Boolean remove
+    Boolean truncate
     String stepper = "nofilter"
     Int maxDepth = 1000000
-    Boolean? ignoreOrphans
+    Boolean ignoreOrphans
     String referenceName = "37"
     File cosmicFile
   }
@@ -59,8 +59,7 @@ workflow smmipsWorkflow {
   }
 
 
-  Boolean removeIntermediate = if (defined(remove)) then true else false
-
+  Boolean removeIntermediate = if remove then true else false
 
   call assignSmmips {
     input:
@@ -85,8 +84,8 @@ workflow smmipsWorkflow {
   File assignedBam = assignSmmips.assignedBam 
   File assignedBamIndex = assignSmmips.assignedBamIndex 
 
-  Boolean truncateColumn = if (defined(truncate)) then true else false
-  Boolean ignoreOrphanReads = if (defined(ignoreOrphans)) then true else false
+  Boolean truncateColumn = if truncate then true else false
+  Boolean ignoreOrphanReads = if ignoreOrphans then true else false
 
   call countVariants {
     input: 
