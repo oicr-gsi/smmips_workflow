@@ -22,7 +22,6 @@
           "smmipsWorkflow.referenceName": "37",
           "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
           "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsiprojects/abelsonlab/smMIPS/rjovelin/CosmicMutantExport.tsv.gz",
-          "smmipsWorkflow.outdir": "/scratch2/groups/gsi/bis/rjovelin/smmips",
           "smmipsWorkflow.remove": false,
           "smmipsWorkflow.truncate": false,
           "smmipsWorkflow.ignoreOrphans": false    
@@ -39,7 +38,6 @@
           "smmipsWorkflow.referenceName": "37",
           "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
           "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsiprojects/abelsonlab/smMIPS/rjovelin/CosmicMutantExport.tsv.gz",
-          "smmipsWorkflow.outdir": "/scratch2/groups/gsi/bis/rjovelin/smmips",
           "smmipsWorkflow.remove": false,
           "smmipsWorkflow.truncate": true,
           "smmipsWorkflow.ignoreOrphans": false    
@@ -56,26 +54,9 @@
           "smmipsWorkflow.referenceName": "37",
           "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
           "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsiprojects/abelsonlab/smMIPS/rjovelin/CosmicMutantExport.tsv.gz",
-          "smmipsWorkflow.outdir": "/scratch2/groups/gsi/bis/rjovelin/smmips",
           "smmipsWorkflow.remove": false,
           "smmipsWorkflow.truncate": true,
           "smmipsWorkflow.ignoreOrphans": true    
-        }
-      }
-    },
-    {
-      "id": "CBAM_0006_Ly_P_PE_320_TS_no_dir",
-      "parameters": {
-        "wdl_inputs": {
-          "smmipsWorkflow.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R1.fastq.gz",
-          "smmipsWorkflow.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R2.fastq.gz",
-          "smmipsWorkflow.prefix": "CBAM_0006_Ly_P_PE_320_TS",
-          "smmipsWorkflow.referenceName": "37",
-          "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsiprojects/abelsonlab/smMIPS/rjovelin/CosmicMutantExport.tsv.gz",
-          "smmipsWorkflow.remove": false,
-          "smmipsWorkflow.truncate": false,
-          "smmipsWorkflow.ignoreOrphans": false    
         }
       }
     },
@@ -89,7 +70,6 @@
           "smmipsWorkflow.referenceName": "37",
           "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
           "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsiprojects/abelsonlab/smMIPS/rjovelin/CosmicMutantExport.tsv.gz",
-          "smmipsWorkflow.outdir": "/scratch2/groups/gsi/bis/rjovelin/smmips",
           "smmipsWorkflow.remove": false,
           "smmipsWorkflow.truncate": false,
           "smmipsWorkflow.ignoreOrphans": false    
@@ -103,23 +83,6 @@
           "smmipsWorkflow.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0143_Pb_U_PE_304_TS_200722_A00469_0112_AHJ5WMDRXX_1_CTAGCCTG-ATGGCATT_R1.fastq.gz",
           "smmipsWorkflow.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0143_Pb_U_PE_304_TS_200722_A00469_0112_AHJ5WMDRXX_1_CTAGCCTG-ATGGCATT_R2.fastq.gz",
           "smmipsWorkflow.prefix": "CHMI_0143_Pb_U_PE_304_TS",
-          "smmipsWorkflow.referenceName": "37",
-          "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsiprojects/abelsonlab/smMIPS/rjovelin/CosmicMutantExport.tsv.gz",
-          "smmipsWorkflow.outdir": "/scratch2/groups/gsi/bis/rjovelin/smmips",
-          "smmipsWorkflow.remove": false,
-          "smmipsWorkflow.truncate": false,
-          "smmipsWorkflow.ignoreOrphans": false    
-        }
-      }
-    },
-    {
-      "id": "CHMI_0064_Pb_U_PE_302_TS_no_dir",
-      "parameters": {
-        "wdl_inputs": {
-          "smmipsWorkflow.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0064_Pb_U_PE_302_TS_200722_A00469_0112_AHJ5WMDRXX_1_TCGTATCA-CCCGTCGG_R1.fastq.gz",
-          "smmipsWorkflow.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0064_Pb_U_PE_302_TS_200722_A00469_0112_AHJ5WMDRXX_1_TCGTATCA-CCCGTCGG_R2.fastq.gz",
-          "smmipsWorkflow.prefix": "CHMI_0064_Pb_U_PE_302_TS",
           "smmipsWorkflow.referenceName": "37",
           "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
           "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsiprojects/abelsonlab/smMIPS/rjovelin/CosmicMutantExport.tsv.gz",
