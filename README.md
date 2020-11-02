@@ -106,6 +106,6 @@ This WDL workflow is wrapped in a Niassa workflow (https://github.com/oicr-gsi/p
 
 
 ## Support ##
-For support, please file an issue on the [Github project](https://github.com/oicr-gsi/smmips_workflow) or send an email to gsi@oicr.on.ca .
+For support, please file an issue on the [Github project](https://github.com/oicr-gsi/smmipsWorkflow) or send an email to gsi@oicr.on.ca .
 
 Generated with wdl_doc_gen (https://github.com/oicr-gsi/wdl_doc_gen/)
