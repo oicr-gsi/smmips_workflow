@@ -6,7 +6,6 @@ workflow smmipsWorkflow {
     File fastq2
     File panel
     String outdir = "./"    
-    String bwa    
     String prefix  
     Int maxSubs = 0
     Int upstreamNucleotides = 0
@@ -43,7 +42,6 @@ workflow smmipsWorkflow {
     gapExtension: "Score for extending an open gap"
     alignmentOverlapThreshold: "Cut-off value for the length of the de-gapped overlap between read1 and read2"
     matchesThreshold: "Cut-off value for the number of matching pos"
-    bwa: "Path to the bwa script"
     maxDepth: "Maximum read depth. Default is 1000000"
     ignoreOrphans: "Ignore orphans (paired reads that are not in a proper pair). Default is False"
     truncate: "Only pileup columns in the exact region specificied are returned. Default is False"
@@ -67,7 +65,6 @@ workflow smmipsWorkflow {
       fastq2 = fastq2,
       panel = panel,
       outdir = outdir,
-      bwa = bwa,    
       prefix = prefix,  
       maxSubs = maxSubs,
       upstreamNucleotides = upstreamNucleotides,
@@ -119,13 +116,12 @@ workflow smmipsWorkflow {
 
 task assignSmmips {
   input {
-    String modules = "smmips/1.0.0 hg19-bwa-index/0.7.12"
+    String modules = "smmips/1.0.0 hg19-bwa-index/0.7.12 bwa/0.7.12"
     Int memory = 32
     File fastq1
     File fastq2
     File panel
     String outdir = "./"    
-    String bwa    
     String prefix  
     Int maxSubs = 0
     Int upstreamNucleotides = 0
@@ -140,6 +136,7 @@ task assignSmmips {
     String refFasta = "$HG19_BWA_INDEX_ROOT/hg19_random.fa"
     String refFai = "$HG19_BWA_INDEX_ROOT/hg19_random.fa.fai"
     String refDict = "$HG19_BWA_INDEX_ROOT/hg19_random.dict"
+    String bwa = "$BWA_ROOT/bin/bwa"
   }
 
 
