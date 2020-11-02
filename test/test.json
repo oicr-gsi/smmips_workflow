@@ -30,7 +30,7 @@
       }
     },
     {
-      "id": "assign_smmips_truncate,
+      "id": "assign_smmips_truncate",
       "parameters": {
         "wdl_inputs": {
           "smmipsWorkflow.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R1.fastq.gz",
