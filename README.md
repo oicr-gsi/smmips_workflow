@@ -102,7 +102,8 @@ This WDL workflow is wrapped in a Niassa workflow (https://github.com/oicr-gsi/p
 -DwebserviceUrl=http://niassa-url:8080 \
 -DwebserviceUser=niassa_user \
 -DwebservicePassword=niassa_user_password \
--Dcromwell-host=http://cromwell-url:8000```
+-Dcromwell-host=http://cromwell-url:8000
+```
 
 
 ## Support ##
