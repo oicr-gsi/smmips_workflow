@@ -118,6 +118,7 @@ task assignSmmips {
   input {
     String modules = "smmips/1.0.0 hg19-bwa-index/0.7.12 bwa/0.7.12"
     Int memory = 32
+    Int timeout = 36
     File fastq1
     File fastq2
     File panel
@@ -152,6 +153,7 @@ task assignSmmips {
   runtime {
     memory:  "~{memory} GB"
     modules: "~{modules}"
+    timeout = "~{timeout}"
   }
 
   output {
@@ -183,6 +185,7 @@ task countVariants {
     String referenceName = "37"
     File cosmicFile
     Int memory = 32
+    Int timeout = 24
   }
 
 
@@ -198,6 +201,7 @@ task countVariants {
   runtime {
     memory:  "~{memory} GB"
     modules: "~{modules}"
+    timeout = "~{timeout}"
   }
 
   output {
