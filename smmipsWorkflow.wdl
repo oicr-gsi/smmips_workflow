@@ -100,7 +100,8 @@ workflow smmipsWorkflow {
   }
 
   output {
-    Array[File] outputStatsFiles = assignSmmips.statsFiles
+    File outputExtractionMetrics = assignSmmips.extractionMetrics
+    File outputReadCounts = assignSmmips.readCounts
     File outputSortedbam = assignSmmips.sortedbam
     File outputSortedbamIndex = assignSmmips.sortedbamIndex
     File outputAssignedBam = assignSmmips.assignedBam
@@ -112,7 +113,6 @@ workflow smmipsWorkflow {
     File outputCountTable = countVariants.countTable 
   }
 }
-
 
 task assignSmmips {
   input {
@@ -157,7 +157,8 @@ task assignSmmips {
   }
 
   output {
-  Array[File] statsFiles = glob("${outdir}/stats/*.json")
+  File extractionMetrics = "${outdir}/stats/${prefix}_extraction_metrics.json"
+  File readCounts = "${outdir}/stats/${prefix}_smmip_counts.json"
   File sortedbam = "${outdir}/out/${prefix}.sorted.bam"
   File sortedbamIndex = "${outdir}/out/${prefix}.sorted.bam.bai"
   File assignedBam = "${outdir}/out/${prefix}.assigned_reads.sorted.bam"
