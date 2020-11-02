@@ -16,11 +16,11 @@ workflow smmipsWorkflow {
     Float gapExtension   = -1
     Int alignmentOverlapThreshold = 60
     Float matchesThreshold = 0.7  
-    Boolean remove
-    Boolean truncate
+    Boolean remove = false
+    Boolean truncate = false
     String stepper = "nofilter"
     Int maxDepth = 1000000
-    Boolean ignoreOrphans
+    Boolean ignoreOrphans = false
     String referenceName = "37"
     File cosmicFile
   }
