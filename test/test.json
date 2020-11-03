@@ -21,7 +21,7 @@
           "smmipsWorkflow.prefix": "CBAM_0006_Ly_P_PE_320_TS",
           "smmipsWorkflow.referenceName": "37",
           "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsiprojects/abelsonlab/smMIPS/rjovelin/CosmicMutantExport.tsv.gz",
+          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CosmicMutantExport.tsv.gz",
           "smmipsWorkflow.remove": false,
           "smmipsWorkflow.truncate": false,
           "smmipsWorkflow.ignoreOrphans": false    
@@ -37,7 +37,7 @@
           "smmipsWorkflow.prefix": "CBAM_0006_Ly_P_PE_320_TS",
           "smmipsWorkflow.referenceName": "37",
           "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsiprojects/abelsonlab/smMIPS/rjovelin/CosmicMutantExport.tsv.gz",
+          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CosmicMutantExport.tsv.gz",
           "smmipsWorkflow.remove": false,
           "smmipsWorkflow.truncate": true,
           "smmipsWorkflow.ignoreOrphans": false    
@@ -53,7 +53,7 @@
           "smmipsWorkflow.prefix": "CBAM_0006_Ly_P_PE_320_TS",
           "smmipsWorkflow.referenceName": "37",
           "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsiprojects/abelsonlab/smMIPS/rjovelin/CosmicMutantExport.tsv.gz",
+          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CosmicMutantExport.tsv.gz",
           "smmipsWorkflow.remove": false,
           "smmipsWorkflow.truncate": true,
           "smmipsWorkflow.ignoreOrphans": true    
@@ -69,7 +69,7 @@
           "smmipsWorkflow.prefix": "CHMI_0117_Pb_U_PE_302_TS",
           "smmipsWorkflow.referenceName": "37",
           "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsiprojects/abelsonlab/smMIPS/rjovelin/CosmicMutantExport.tsv.gz",
+          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CosmicMutantExport.tsv.gz",
           "smmipsWorkflow.remove": false,
           "smmipsWorkflow.truncate": false,
           "smmipsWorkflow.ignoreOrphans": false    
@@ -85,7 +85,7 @@
           "smmipsWorkflow.prefix": "CHMI_0143_Pb_U_PE_304_TS",
           "smmipsWorkflow.referenceName": "37",
           "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsiprojects/abelsonlab/smMIPS/rjovelin/CosmicMutantExport.tsv.gz",
+          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CosmicMutantExport.tsv.gz",
           "smmipsWorkflow.remove": false,
           "smmipsWorkflow.truncate": false,
           "smmipsWorkflow.ignoreOrphans": false    
