@@ -153,7 +153,7 @@ task assignSmmips {
   runtime {
     memory:  "~{memory} GB"
     modules: "~{modules}"
-    timeout = "~{timeout}"
+    timeout: "~{timeout}"
   }
 
   output {
@@ -202,7 +202,7 @@ task countVariants {
   runtime {
     memory:  "~{memory} GB"
     modules: "~{modules}"
-    timeout = "~{timeout}"
+    timeout: "~{timeout}"
   }
 
   output {
