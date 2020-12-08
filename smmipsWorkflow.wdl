@@ -114,6 +114,7 @@ workflow smmipsWorkflow {
   }
 }
 
+
 task assignSmmips {
   input {
     String modules = "smmips/1.0.0 hg19-bwa-index/0.7.12 bwa/0.7.12"
@@ -193,7 +194,21 @@ task assignSmmips {
   File emptyBam = "${outdir}/out/${outputFileNamePrefix}.empty_reads.sorted.bam"
   File emptyBamIndex = "${outdir}/out/${outputFileNamePrefix}.empty_reads.sorted.bam.bai"
   }
-}
+
+  meta {
+    output_meta: {
+      sortedbam: "Alignments of reads containing UMIs in paired input fastqs",
+      sortedbamIndex: "Index file of aligned reads containing UMIs",
+      assignedBam: "Alignment of reads assigned to smMIPs. Reads are tagged with smMIP and UMI",
+      assignedBamIndex: "Index file of aligned and assigned reads",
+      unassignedBam: "Alignment of reads that cannot be assigned to smMIPs",
+      unassignedBamIndex: "Index file of aligned but unassigned reads",
+      emptyBam: "Alignment of reads assigned to smMIPs but missing target capture",
+      emptyBamIndex: "Index file of reads with empty smMIPs",
+      extractionMetrics: "Json file with read counts",
+      readCounts: "Json file with read counts with and without target for each smMIP in the panel"
+    }
+  }
 
 
 task countVariants {
@@ -249,6 +264,12 @@ task countVariants {
 
   output {
   File countTable = "${outdir}/out/${outputFileNamePrefix}_Variant_Counts.txt"
+  }
+
+  meta {
+    output_meta: {
+      CountTable: "Table with variant counts at each smMIP position",
+    }
   }
 }
 
