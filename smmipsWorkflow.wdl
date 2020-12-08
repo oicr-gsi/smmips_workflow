@@ -143,8 +143,8 @@ task assignSmmips {
   
     parameter_meta {
       modules: "Names and versions of modules to load"
-      memory = "Memory allocated for this job"
-      timeout = "Hours before task timeout"
+      memory: "Memory allocated for this job"
+      timeout: "Hours before task timeout"
       fastq1: "Path to Fastq1"
       fastq2: "Path to Fastq2"
       panel: "Path to file with smMIP information"
@@ -160,10 +160,10 @@ task assignSmmips {
       alignmentOverlapThreshold: "Cut-off value for the length of the de-gapped overlap between read1 and read2"
       matchesThreshold: "Cut-off value for the number of matching pos"
       remove: "Remove intermediate files if True"
-      refFasta = "Path to to the reference genome"
-      refFai = "Path to the reference index"
-      refDict = "Path to the reference dictionary"
-      bwa = "Path to the bwa script"
+      refFasta: "Path to to the reference genome"
+      refFai: "Path to the reference index"
+      refDict: "Path to the reference dictionary"
+      bwa: "Path to the bwa script"
   }
 
   String removeFlag = if remove then "--remove" else ""
@@ -227,8 +227,8 @@ task countVariants {
     maxDepth: "Maximum read depth. Default is 1000000"
     referenceName: "Reference genome. Must be the same reference used in panel. Accepted values: 37 or 38"
     cosmicFile: "Tab separated table of all COSMIC coding point mutations from targeted and genome wide screens"
-    memory = "Memory allocated for this job"
-    timeout = "Hours before task timeout"
+    memory: "Memory allocated for this job"
+    timeout: "Hours before task timeout"
   }
 
 
