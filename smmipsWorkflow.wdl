@@ -140,6 +140,31 @@ task assignSmmips {
     String bwa = "$BWA_ROOT/bin/bwa"
   }
 
+  
+    parameter_meta {
+      modules: "Names and versions of modules to load"
+      memory = "Memory allocated for this job"
+      timeout = "Hours before task timeout"
+      fastq1: "Path to Fastq1"
+      fastq2: "Path to Fastq2"
+      panel: "Path to file with smMIP information"
+      outdir: "Path to directory where directory structure is created"
+      outputFileNamePrefix: "Prefix used to name the output files"
+      maxSubs: "Maximum number of substitutions allowed in the probe sequence"
+      upstreamNucleotides: "Maximum number of nucleotides upstream the UMI sequence"
+      umiLength: "Length of the UMI"
+      match: "Score of identical characters"
+      mismatch: "Score of non-identical characters"
+      gapOpening: "Score for opening a gap"
+      gapExtension: "Score for extending an open gap"
+      alignmentOverlapThreshold: "Cut-off value for the length of the de-gapped overlap between read1 and read2"
+      matchesThreshold: "Cut-off value for the number of matching pos"
+      remove: "Remove intermediate files if True"
+      refFasta = "Path to to the reference genome"
+      refFai = "Path to the reference index"
+      refDict = "Path to the reference dictionary"
+      bwa = "Path to the bwa script"
+  }
 
   String removeFlag = if remove then "--remove" else ""
 
@@ -187,6 +212,23 @@ task countVariants {
     File cosmicFile
     Int memory = 32
     Int timeout = 24
+  }
+
+
+  parameter_meta {
+    modules: "Names and versions of modules to load"
+    assignedBam: "Bam with UMI-ammotated reads" 
+    panel: "Path to file with smMIP information"
+    outdir: "Path to directory where directory structure is created"
+    outputFileNamePrefix: "Prefix used to name the output files"
+    truncate: "Only pileup columns in the exact region specificied are returned. Default is False"
+    ignoreOrphans: "Ignore orphans (paired reads that are not in a proper pair). Default is False"
+    stepper: "Filter or include reads in the pileup. See pysam doc for behavior of the all or nofilter options. Default is nofilter"
+    maxDepth: "Maximum read depth. Default is 1000000"
+    referenceName: "Reference genome. Must be the same reference used in panel. Accepted values: 37 or 38"
+    cosmicFile: "Tab separated table of all COSMIC coding point mutations from targeted and genome wide screens"
+    memory = "Memory allocated for this job"
+    timeout = "Hours before task timeout"
   }
 
 
