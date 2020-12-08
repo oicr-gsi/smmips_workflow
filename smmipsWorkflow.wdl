@@ -6,7 +6,7 @@ workflow smmipsWorkflow {
     File fastq2
     File panel
     String outdir = "./"    
-    String prefix  
+    String outputFileNamePrefix  
     Int maxSubs = 0
     Int upstreamNucleotides = 0
     Int umiLength = 4  
@@ -30,7 +30,7 @@ workflow smmipsWorkflow {
     outdir: "Path to directory where directory structure is created"
     fastq1: "Path to Fastq1"
     fastq2: "Path to Fastq2"
-    prefix: "Prefix used to name the output files"
+    outputFileNamePrefix: "Prefix used to name the output files"
     remove: "Remove intermediate files if True"
     panel: "Path to file with smMIP information"
     upstreamNucleotides: "Maximum number of nucleotides upstream the UMI sequence"
@@ -65,7 +65,7 @@ workflow smmipsWorkflow {
       fastq2 = fastq2,
       panel = panel,
       outdir = outdir,
-      prefix = prefix,  
+      outputFileNamePrefix = outputFileNamePrefix,  
       maxSubs = maxSubs,
       upstreamNucleotides = upstreamNucleotides,
       umiLength = umiLength, 
@@ -90,7 +90,7 @@ workflow smmipsWorkflow {
       assignedBamIndex = assignedBamIndex,
       panel = panel,
       outdir = outdir,
-      prefix = prefix,  
+      outputFileNamePrefix = outputFileNamePrefix,  
       truncate = truncateColumn,
       ignoreOrphans = ignoreOrphanReads,
       stepper = stepper,
@@ -123,7 +123,7 @@ task assignSmmips {
     File fastq2
     File panel
     String outdir = "./"    
-    String prefix  
+    String outputFileNamePrefix  
     Int maxSubs = 0
     Int upstreamNucleotides = 0
     Int umiLength = 4 
@@ -147,7 +147,7 @@ task assignSmmips {
     set -euo pipefail
     cp ~{refFai} .
     cp ~{refDict} .
-    smmips assign -f1 ~{fastq1} -f2 ~{fastq2} -pa ~{panel} -r ~{refFasta} -pf ~{prefix} -s ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength}  -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension}  -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} -o ~{outdir} -bwa ~{bwa} ~{removeFlag}
+    smmips assign -f1 ~{fastq1} -f2 ~{fastq2} -pa ~{panel} -r ~{refFasta} -pf ~{outputFileNamePrefix} -s ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength}  -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension}  -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} -o ~{outdir} -bwa ~{bwa} ~{removeFlag}
   >>>
 
   runtime {
@@ -157,16 +157,16 @@ task assignSmmips {
   }
 
   output {
-  File extractionMetrics = "${outdir}/stats/${prefix}_extraction_metrics.json"
-  File readCounts = "${outdir}/stats/${prefix}_smmip_counts.json"
-  File sortedbam = "${outdir}/out/${prefix}.sorted.bam"
-  File sortedbamIndex = "${outdir}/out/${prefix}.sorted.bam.bai"
-  File assignedBam = "${outdir}/out/${prefix}.assigned_reads.sorted.bam"
-  File assignedBamIndex = "${outdir}/out/${prefix}.assigned_reads.sorted.bam.bai"
-  File unassignedBam = "${outdir}/out/${prefix}.unassigned_reads.sorted.bam"
-  File unassignedBamIndex = "${outdir}/out/${prefix}.unassigned_reads.sorted.bam.bai"
-  File emptyBam = "${outdir}/out/${prefix}.empty_reads.sorted.bam"
-  File emptyBamIndex = "${outdir}/out/${prefix}.empty_reads.sorted.bam.bai"
+  File extractionMetrics = "${outdir}/stats/${outputFileNamePrefix}_extraction_metrics.json"
+  File readCounts = "${outdir}/stats/${outputFileNamePrefix}_smmip_counts.json"
+  File sortedbam = "${outdir}/out/${outputFileNamePrefix}.sorted.bam"
+  File sortedbamIndex = "${outdir}/out/${outputFileNamePrefix}.sorted.bam.bai"
+  File assignedBam = "${outdir}/out/${outputFileNamePrefix}.assigned_reads.sorted.bam"
+  File assignedBamIndex = "${outdir}/out/${outputFileNamePrefix}.assigned_reads.sorted.bam.bai"
+  File unassignedBam = "${outdir}/out/${outputFileNamePrefix}.unassigned_reads.sorted.bam"
+  File unassignedBamIndex = "${outdir}/out/${outputFileNamePrefix}.unassigned_reads.sorted.bam.bai"
+  File emptyBam = "${outdir}/out/${outputFileNamePrefix}.empty_reads.sorted.bam"
+  File emptyBamIndex = "${outdir}/out/${outputFileNamePrefix}.empty_reads.sorted.bam.bai"
   }
 }
 
@@ -178,7 +178,7 @@ task countVariants {
     File assignedBamIndex
     File panel
     String outdir = "./"
-    String prefix  
+    String outputFileNamePrefix  
     Boolean truncate
     Boolean ignoreOrphans
     String stepper = "nofilter"
@@ -196,7 +196,7 @@ task countVariants {
   command <<<
     set -euo pipefail
     cp ~{assignedBamIndex} .
-    smmips variant -b ~{assignedBam} -p ~{panel} -m ~{maxDepth} -o ~{outdir} -stp ~{stepper} -pf ~{prefix} -rf ~{referenceName} -c ~{cosmicFile} ~{ignoreOrphansFlag} ~{truncateFlag}
+    smmips variant -b ~{assignedBam} -p ~{panel} -m ~{maxDepth} -o ~{outdir} -stp ~{stepper} -pf ~{outputFileNamePrefix} -rf ~{referenceName} -c ~{cosmicFile} ~{ignoreOrphansFlag} ~{truncateFlag}
   >>>
 
   runtime {
@@ -206,7 +206,7 @@ task countVariants {
   }
 
   output {
-  File countTable = "${outdir}/out/${prefix}_Variant_Counts.txt"
+  File countTable = "${outdir}/out/${outputFileNamePrefix}_Variant_Counts.txt"
   }
 }
 
