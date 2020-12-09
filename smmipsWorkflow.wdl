@@ -65,7 +65,7 @@ workflow smmipsWorkflow {
       },
       {
         name: "smmips/1.0.0",
-        https://pypi.org/project/smmips/
+        url: https://pypi.org/project/smmips/
       }
     ]
   }
