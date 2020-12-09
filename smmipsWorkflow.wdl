@@ -179,7 +179,7 @@ task assignSmmips {
       refFai: "Path to the reference index"
       refDict: "Path to the reference dictionary"
       bwa: "Path to the bwa script"
-  }
+    }
 
   String removeFlag = if remove then "--remove" else ""
 
@@ -223,7 +223,7 @@ task assignSmmips {
       readCounts: "Json file with read counts with and without target for each smMIP in the panel"
     }
   }
-
+}
 
 task countVariants {
   input {
