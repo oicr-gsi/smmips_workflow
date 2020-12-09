@@ -156,30 +156,30 @@ task assignSmmips {
   }
 
   
-    parameter_meta {
-      modules: "Names and versions of modules to load"
-      memory: "Memory allocated for this job"
-      timeout: "Hours before task timeout"
-      fastq1: "Path to Fastq1"
-      fastq2: "Path to Fastq2"
-      panel: "Path to file with smMIP information"
-      outdir: "Path to directory where directory structure is created"
-      outputFileNamePrefix: "Prefix used to name the output files"
-      maxSubs: "Maximum number of substitutions allowed in the probe sequence"
-      upstreamNucleotides: "Maximum number of nucleotides upstream the UMI sequence"
-      umiLength: "Length of the UMI"
-      match: "Score of identical characters"
-      mismatch: "Score of non-identical characters"
-      gapOpening: "Score for opening a gap"
-      gapExtension: "Score for extending an open gap"
-      alignmentOverlapThreshold: "Cut-off value for the length of the de-gapped overlap between read1 and read2"
-      matchesThreshold: "Cut-off value for the number of matching pos"
-      remove: "Remove intermediate files if True"
-      refFasta: "Path to to the reference genome"
-      refFai: "Path to the reference index"
-      refDict: "Path to the reference dictionary"
-      bwa: "Path to the bwa script"
-    }
+  parameter_meta {
+    modules: "Names and versions of modules to load"
+    memory: "Memory allocated for this job"
+    timeout: "Hours before task timeout"
+    fastq1: "Path to Fastq1"
+    fastq2: "Path to Fastq2"
+    panel: "Path to file with smMIP information"
+    outdir: "Path to directory where directory structure is created"
+    outputFileNamePrefix: "Prefix used to name the output files"
+    maxSubs: "Maximum number of substitutions allowed in the probe sequence"
+    upstreamNucleotides: "Maximum number of nucleotides upstream the UMI sequence"
+    umiLength: "Length of the UMI"
+    match: "Score of identical characters"
+    mismatch: "Score of non-identical characters"
+    gapOpening: "Score for opening a gap"
+    gapExtension: "Score for extending an open gap"
+    alignmentOverlapThreshold: "Cut-off value for the length of the de-gapped overlap between read1 and read2"
+    matchesThreshold: "Cut-off value for the number of matching pos"
+    remove: "Remove intermediate files if True"
+    refFasta: "Path to to the reference genome"
+    refFai: "Path to the reference index"
+    refDict: "Path to the reference dictionary"
+    bwa: "Path to the bwa script"
+  }
 
   String removeFlag = if remove then "--remove" else ""
 
@@ -224,6 +224,7 @@ task assignSmmips {
     }
   }
 }
+
 
 task countVariants {
   input {
@@ -282,7 +283,7 @@ task countVariants {
 
   meta {
     output_meta: {
-      CountTable: "Table with variant counts at each smMIP position",
+      CountTable: "Table with variant counts at each smMIP position"
     }
   }
 }
