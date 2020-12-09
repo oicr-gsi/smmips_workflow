@@ -54,6 +54,20 @@ workflow smmipsWorkflow {
     author: "Richard Jovelin"
     email: "richard.jovelin@oicr.on.ca"
     description: "Analysis of smMIP libraries"
+    dependencies: [
+      {
+        name: "bwa/0.7.12",
+        url: "http://bio-bwa.sourceforge.net/"
+      },
+      {
+        name: "python/3.6",
+        url: "https://www.python.org/downloads/"
+      },
+      {
+        name: "smmips/1.0.0",
+        https://pypi.org/project/smmips/
+      }
+    ]
   }
 
 
