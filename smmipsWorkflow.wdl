@@ -68,6 +68,20 @@ workflow smmipsWorkflow {
         url: "https://pypi.org/project/smmips/"
       }
     ]
+    
+    output_meta: {
+    outputExtractionMetrics: "Metrics file with extracted read counts",
+    outputReadCounts: "Metric file with read counts for each smmip",
+    outputSortedbam: "Alignment file with all reads",
+    outputSortedbamIndex: "Index of the alignment file with all reads",
+    outputAssignedBam: "Alignment file with assigned reads to smmips",
+    outputAssignedBamIndex: "Index file of the alignment file with assigned reads to smmips",
+    outputUnassignedBam: "Alignment file with unassigned reads",
+    outputUnassignedBamIndex: "Index file of the alignment file with unassigned reds",
+    outputEmptyBam: "Alignment file with empty reads",
+    outputEmptyBamIndex: "Index file of the alignment file with empty reads",
+    outputCountTable: "Table with variant counts" 
+    }
   }
 
 
