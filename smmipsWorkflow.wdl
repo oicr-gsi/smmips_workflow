@@ -74,10 +74,22 @@ workflow smmipsWorkflow {
 
   Boolean removeIntermediate = if remove then true else false
 
-  call assignSmmips {
+  call align {
     input:
       fastq1 = fastq1,
       fastq2 = fastq2,
+      outdir = outdir,
+      outputFileNamePrefix = outputFileNamePrefix,
+      remove = removeIntermediate
+  }
+
+   File sortedbam = align.sortedbam
+   File sortedbamIndex = align.sortedbamIndex
+
+  call assignSmmips {
+    input:
+      sortedbam = sortedbam,
+      sortedbamIndex = sortedbamIndex,
       panel = panel,
       outdir = outdir,
       outputFileNamePrefix = outputFileNamePrefix,  
@@ -90,7 +102,10 @@ workflow smmipsWorkflow {
       gapExtension = gapExtension,  
       alignmentOverlapThreshold = alignmentOverlapThreshold,
       matchesThreshold = matchesThreshold,
-      remove = removeIntermediate
+      remove = removeIntermediate,
+      chromosome = chromosome,
+      start = start,
+      end = end
   }
 
   output {
@@ -110,11 +125,11 @@ workflow smmipsWorkflow {
 
 task assignSmmips {
   input {
-    String modules = "smmips/1.0.0 hg19-bwa-index/0.7.12 bwa/0.7.12"
+    String modules = "smmips/1.0.3"
     Int memory = 32
     Int timeout = 36
-    File fastq1
-    File fastq2
+    File sortedbam
+    File sortedbamIndex
     File panel
     String outdir = "./"    
     String outputFileNamePrefix  
@@ -128,10 +143,9 @@ task assignSmmips {
     Int alignmentOverlapThreshold = 60
     Float matchesThreshold = 0.7  
     Boolean remove
-    String refFasta = "$HG19_BWA_INDEX_ROOT/hg19_random.fa"
-    String refFai = "$HG19_BWA_INDEX_ROOT/hg19_random.fa.fai"
-    String refDict = "$HG19_BWA_INDEX_ROOT/hg19_random.dict"
-    String bwa = "$BWA_ROOT/bin/bwa"
+    String chromosome
+    Int start
+    Int end
   }
 
   
@@ -139,8 +153,8 @@ task assignSmmips {
     modules: "Names and versions of modules to load"
     memory: "Memory allocated for this job"
     timeout: "Hours before task timeout"
-    fastq1: "Path to Fastq1"
-    fastq2: "Path to Fastq2"
+    sortedbam: "Alignments of reads containing UMIs in paired input fastqs"
+    sortedbamIndex: "Index file of aligned reads containing UMIs"
     panel: "Path to file with smMIP information"
     outdir: "Path to directory where directory structure is created"
     outputFileNamePrefix: "Prefix used to name the output files"
@@ -154,10 +168,9 @@ task assignSmmips {
     alignmentOverlapThreshold: "Cut-off value for the length of the de-gapped overlap between read1 and read2"
     matchesThreshold: "Cut-off value for the number of matching pos"
     remove: "Remove intermediate files if True"
-    refFasta: "Path to to the reference genome"
-    refFai: "Path to the reference index"
-    refDict: "Path to the reference dictionary"
-    bwa: "Path to the bwa script"
+    chromosome: "Chromomosome where reads are mapped"
+    start: "Start position of region on chromosome"
+    end: "End position of region on chromosome"
   }
 
   String removeFlag = if remove then "--remove" else ""
@@ -166,7 +179,7 @@ task assignSmmips {
     set -euo pipefail
     cp ~{refFai} .
     cp ~{refDict} .
-    smmips assign -f1 ~{fastq1} -f2 ~{fastq2} -pa ~{panel} -r ~{refFasta} -pf ~{outputFileNamePrefix} -s ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength}  -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension}  -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} -o ~{outdir} -bwa ~{bwa} ~{removeFlag}
+    smmips assign -b ~{sortedbam} -pa ~{panel} -pf ~{outputFileNamePrefix} -ms ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength}  -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension}  -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} -o ~{outdir} -c ~{chromosome} -s ~{start} -e ~{end} ~{removeFlag}
   >>>
 
   runtime {
@@ -206,5 +219,73 @@ task assignSmmips {
 
 
 
+task align {
+  input {
+    String modules = "smmips/1.0.3 hg19-bwa-index/0.7.12 bwa/0.7.12"
+    Int memory = 32
+    Int timeout = 36
+    File fastq1
+    File fastq2
+    String outdir = "./"    
+    String outputFileNamePrefix  
+    Boolean remove
+    String refFasta = "$HG19_BWA_INDEX_ROOT/hg19_random.fa"
+    String refFai = "$HG19_BWA_INDEX_ROOT/hg19_random.fa.fai"
+    String refDict = "$HG19_BWA_INDEX_ROOT/hg19_random.dict"
+    String bwa = "$BWA_ROOT/bin/bwa"
+  }
+
+  
+  parameter_meta {
+    modules: "Names and versions of modules to load"
+    memory: "Memory allocated for this job"
+    timeout: "Hours before task timeout"
+    fastq1: "Path to Fastq1"
+    fastq2: "Path to Fastq2"
+    outdir: "Path to directory where directory structure is created"
+    outputFileNamePrefix: "Prefix used to name the output files"
+    remove: "Remove intermediate files if True"
+    refFasta: "Path to to the reference genome"
+    refFai: "Path to the reference index"
+    refDict: "Path to the reference dictionary"
+    bwa: "Path to the bwa script"
+  }
+
+  String removeFlag = if remove then "--remove" else ""
+
+  command <<<
+    set -euo pipefail
+    cp ~{refFai} .
+    cp ~{refDict} .
+    smmips align -bwa ~{bwa} -f1 ~{fastq1} -f2 ~{fastq2} -r ~{refFasta} -pf ~{outputFileNamePrefix} -o ~{outdir} ~{removeFlag}
+  >>>
+
+  runtime {
+    memory:  "~{memory} GB"
+    modules: "~{modules}"
+    timeout: "~{timeout}"
+  }
+
+  output {
+  File sortedbam = "${outdir}/out/${outputFileNamePrefix}.sorted.bam"
+  File sortedbamIndex = "${outdir}/out/${outputFileNamePrefix}.sorted.bam.bai"
+  }
+
+  meta {
+    output_meta: {
+      sortedbam: "Alignments of reads containing UMIs in paired input fastqs",
+      sortedbamIndex: "Index file of aligned reads containing UMIs"
+    }
+  }
+}
 
 
+
+
+
+
+
+
+
+
+    
