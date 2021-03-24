@@ -52,7 +52,7 @@ workflow smmipsWorkflow {
         url: "https://www.python.org/downloads/"
       },
       {
-        name: "smmips/1.0.0",
+        name: "smmips/1.0.3",
         url: "https://pypi.org/project/smmips/"
       }
     ]
