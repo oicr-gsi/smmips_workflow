@@ -17,12 +17,6 @@ workflow smmipsWorkflow {
     Int alignmentOverlapThreshold = 60
     Float matchesThreshold = 0.7  
     Boolean remove = false
-    Boolean truncate = false
-    String stepper = "nofilter"
-    Int maxDepth = 1000000
-    Boolean ignoreOrphans = false
-    String referenceName = "37"
-    File cosmicFile
   }
 
 
@@ -42,12 +36,6 @@ workflow smmipsWorkflow {
     gapExtension: "Score for extending an open gap"
     alignmentOverlapThreshold: "Cut-off value for the length of the de-gapped overlap between read1 and read2"
     matchesThreshold: "Cut-off value for the number of matching pos"
-    maxDepth: "Maximum read depth. Default is 1000000"
-    ignoreOrphans: "Ignore orphans (paired reads that are not in a proper pair). Default is False"
-    truncate: "Only pileup columns in the exact region specificied are returned. Default is False"
-    stepper: "Filter or include reads in the pileup. See pysam doc for behavior of the all or nofilter options. Default is nofilter"
-    referenceName: "Reference genome. Must be the same reference used in panel. Accepted values: 37 or 38"
-    cosmicFile: "Tab separated table of all COSMIC coding point mutations from targeted and genome wide screens"
   }
 
   meta {
@@ -80,7 +68,6 @@ workflow smmipsWorkflow {
     outputUnassignedBamIndex: "Index file of the alignment file with unassigned reds",
     outputEmptyBam: "Alignment file with empty reads",
     outputEmptyBamIndex: "Index file of the alignment file with empty reads",
-    outputCountTable: "Table with variant counts" 
     }
   }
 
@@ -106,27 +93,6 @@ workflow smmipsWorkflow {
       remove = removeIntermediate
   }
 
-  File assignedBam = assignSmmips.assignedBam 
-  File assignedBamIndex = assignSmmips.assignedBamIndex 
-
-  Boolean truncateColumn = if truncate then true else false
-  Boolean ignoreOrphanReads = if ignoreOrphans then true else false
-
-  call countVariants {
-    input: 
-      assignedBam = assignedBam,
-      assignedBamIndex = assignedBamIndex,
-      panel = panel,
-      outdir = outdir,
-      outputFileNamePrefix = outputFileNamePrefix,  
-      truncate = truncateColumn,
-      ignoreOrphans = ignoreOrphanReads,
-      stepper = stepper,
-      maxDepth = maxDepth,
-      referenceName = referenceName,
-      cosmicFile = cosmicFile
-  }
-
   output {
     File outputExtractionMetrics = assignSmmips.extractionMetrics
     File outputReadCounts = assignSmmips.readCounts
@@ -138,7 +104,6 @@ workflow smmipsWorkflow {
     File outputUnassignedBamIndex = assignSmmips.unassignedBamIndex
     File outputEmptyBam = assignSmmips.emptyBam
     File outputEmptyBamIndex = assignSmmips.emptyBamIndex
-    File outputCountTable = countVariants.countTable 
   }
 }
 
@@ -240,65 +205,6 @@ task assignSmmips {
 }
 
 
-task countVariants {
-  input {
-    String modules = "smmips/1.0.0"
-    File assignedBam
-    File assignedBamIndex
-    File panel
-    String outdir = "./"
-    String outputFileNamePrefix  
-    Boolean truncate
-    Boolean ignoreOrphans
-    String stepper = "nofilter"
-    Int maxDepth = 1000000
-    String referenceName = "37"
-    File cosmicFile
-    Int memory = 32
-    Int timeout = 24
-  }
 
 
-  parameter_meta {
-    modules: "Names and versions of modules to load"
-    assignedBam: "Bam with UMI-ammotated reads" 
-    panel: "Path to file with smMIP information"
-    outdir: "Path to directory where directory structure is created"
-    outputFileNamePrefix: "Prefix used to name the output files"
-    truncate: "Only pileup columns in the exact region specificied are returned. Default is False"
-    ignoreOrphans: "Ignore orphans (paired reads that are not in a proper pair). Default is False"
-    stepper: "Filter or include reads in the pileup. See pysam doc for behavior of the all or nofilter options. Default is nofilter"
-    maxDepth: "Maximum read depth. Default is 1000000"
-    referenceName: "Reference genome. Must be the same reference used in panel. Accepted values: 37 or 38"
-    cosmicFile: "Tab separated table of all COSMIC coding point mutations from targeted and genome wide screens"
-    memory: "Memory allocated for this job"
-    timeout: "Hours before task timeout"
-  }
-
-
-  String truncateFlag = if truncate then "-t" else ""  
-  String ignoreOrphansFlag = if ignoreOrphans then "-io" else "" 
-
-  command <<<
-    set -euo pipefail
-    cp ~{assignedBamIndex} .
-    smmips variant -b ~{assignedBam} -p ~{panel} -m ~{maxDepth} -o ~{outdir} -stp ~{stepper} -pf ~{outputFileNamePrefix} -rf ~{referenceName} -c ~{cosmicFile} ~{ignoreOrphansFlag} ~{truncateFlag}
-  >>>
-
-  runtime {
-    memory:  "~{memory} GB"
-    modules: "~{modules}"
-    timeout: "~{timeout}"
-  }
-
-  output {
-  File countTable = "${outdir}/out/${outputFileNamePrefix}_Variant_Counts.txt"
-  }
-
-  meta {
-    output_meta: {
-      CountTable: "Table with variant counts at each smMIP position"
-    }
-  }
-}
 
