@@ -281,11 +281,59 @@ task align {
 
 
 
+task merge {
+  input {
+    String modules = "smmips/1.0.3"
+    Int memory = 32
+    Int timeout = 36
+    String outdir = "./"    
+    Boolean remove
+    String outputFileNamePrefix
+  }
 
+  
+  parameter_meta {
+    modules: "Names and versions of modules to load"
+    memory: "Memory allocated for this job"
+    timeout: "Hours before task timeout"
+    outdir: "Path to directory where directory structure is created"
+    remove: "Remove intermediate files if True"
+    outputFileNamePrefix: "Prefix used to name the output files"
+  }
 
+  String removeFlag = if remove then "--remove" else ""
 
+  command <<<
+    set -euo pipefail
+    cp ~{refFai} .
+    cp ~{refDict} .
+    smmips merge -o ~{outdir} ~{removeFlag}
+  >>>
 
+  runtime {
+    memory:  "~{memory} GB"
+    modules: "~{modules}"
+    timeout: "~{timeout}"
+  }
 
+  output {
+  File extractionMetrics = "${outdir}/stats/${outputFileNamePrefix}_extraction_metrics.json"
+  File readCounts = "${outdir}/stats/${outputFileNamePrefix}_smmip_counts.json"
+  File assignedBam = "${outdir}/out/${outputFileNamePrefix}.assigned_reads.sorted.bam"
+  File assignedBamIndex = "${outdir}/out/${outputFileNamePrefix}.assigned_reads.sorted.bam.bai"
+  File emptyBam = "${outdir}/out/${outputFileNamePrefix}.empty_reads.sorted.bam"
+  File emptyBamIndex = "${outdir}/out/${outputFileNamePrefix}.empty_reads.sorted.bam.bai"
+  }
 
+  meta {
+    output_meta: {
+      sortedbam: "Alignments of reads containing UMIs in paired input fastqs",
+      sortedbamIndex: "Index file of aligned reads containing UMIs"
+      extractionMetrics: "Metrics file with extracted read counts",
+      readCounts: "Metric file with read counts for each smmip",
+      emptyBam: "Alignment file with empty reads",
+      emptyBamIndex: "Index file of the alignment file with empty reads",
+    }
+  }
+}
 
-    
