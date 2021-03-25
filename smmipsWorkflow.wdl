@@ -17,6 +17,7 @@ workflow smmipsWorkflow {
     Int alignmentOverlapThreshold = 60
     Float matchesThreshold = 0.7  
     Boolean remove = false
+    Int distance
   }
 
 
@@ -36,6 +37,7 @@ workflow smmipsWorkflow {
     gapExtension: "Score for extending an open gap"
     alignmentOverlapThreshold: "Cut-off value for the length of the de-gapped overlap between read1 and read2"
     matchesThreshold: "Cut-off value for the number of matching pos"
+    distance: "Minimum distance between smmips for grouping"
   }
 
   meta {
@@ -60,14 +62,6 @@ workflow smmipsWorkflow {
     output_meta: {
     outputExtractionMetrics: "Metrics file with extracted read counts",
     outputReadCounts: "Metric file with read counts for each smmip",
-    outputSortedbam: "Alignment file with all reads",
-    outputSortedbamIndex: "Index of the alignment file with all reads",
-    outputAssignedBam: "Alignment file with assigned reads to smmips",
-    outputAssignedBamIndex: "Index file of the alignment file with assigned reads to smmips",
-    outputUnassignedBam: "Alignment file with unassigned reads",
-    outputUnassignedBamIndex: "Index file of the alignment file with unassigned reds",
-    outputEmptyBam: "Alignment file with empty reads",
-    outputEmptyBamIndex: "Index file of the alignment file with empty reads",
     }
   }
 
@@ -111,14 +105,6 @@ workflow smmipsWorkflow {
   output {
     File outputExtractionMetrics = assignSmmips.extractionMetrics
     File outputReadCounts = assignSmmips.readCounts
-    File outputSortedbam = assignSmmips.sortedbam
-    File outputSortedbamIndex = assignSmmips.sortedbamIndex
-    File outputAssignedBam = assignSmmips.assignedBam
-    File outputAssignedBamIndex = assignSmmips.assignedBamIndex
-    File outputUnassignedBam = assignSmmips.unassignedBam
-    File outputUnassignedBamIndex = assignSmmips.unassignedBamIndex
-    File outputEmptyBam = assignSmmips.emptyBam
-    File outputEmptyBamIndex = assignSmmips.emptyBamIndex
   }
 }
 
