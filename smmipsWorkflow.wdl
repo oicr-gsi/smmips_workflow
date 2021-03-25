@@ -1,6 +1,6 @@
 version 1.0
 
-workflow smmipsWorkflow {
+workflow smmipsQC {
   input {
     File fastq1
     File fastq2
@@ -56,6 +56,10 @@ workflow smmipsWorkflow {
       {
         name: "smmips/1.0.3",
         url: "https://pypi.org/project/smmips/"
+      },
+      {
+        name: "smmipRegionFinder/1.0",
+        url: "https://github.com/oicr-gsi/smmipRegionFinder"
       }
     ]
     
