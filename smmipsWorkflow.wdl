@@ -337,3 +337,45 @@ task merge {
   }
 }
 
+
+
+task findRegions {
+  input {
+    String modules = "smmipRegionFinder/1.0"
+    Int memory = 32
+    Int timeout = 36
+    String panel    
+    Int distance
+  }
+
+  parameter_meta {
+    modules: "Names and versions of modules to load"
+    memory: "Memory allocated for this job"
+    timeout: "Hours before task timeout"
+    panel: "Path to file with smMIP information"
+    distance: "Minimum distance between smmips for grouping"
+  }
+
+  command <<<
+    set -euo pipefail
+    smmipRegionFinder -p ~{panel} -d ~{distance}
+  >>>
+
+  runtime {
+    memory:  "~{memory} GB"
+    modules: "~{modules}"
+    timeout: "~{timeout}"
+  }
+
+  output {
+  Array coordinates
+  }
+
+  meta {
+    output_meta: {
+      coordinates: "Array with coordinates of smmip regions"
+    }
+  }
+}
+
+
