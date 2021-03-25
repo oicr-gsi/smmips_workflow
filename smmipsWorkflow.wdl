@@ -177,8 +177,6 @@ task assignSmmips {
 
   command <<<
     set -euo pipefail
-    cp ~{refFai} .
-    cp ~{refDict} .
     smmips assign -b ~{sortedbam} -pa ~{panel} -pf ~{outputFileNamePrefix} -ms ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength}  -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension}  -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} -o ~{outdir} -c ~{chromosome} -s ~{start} -e ~{end} ~{removeFlag}
   >>>
 
@@ -255,8 +253,6 @@ task align {
 
   command <<<
     set -euo pipefail
-    cp ~{refFai} .
-    cp ~{refDict} .
     smmips align -bwa ~{bwa} -f1 ~{fastq1} -f2 ~{fastq2} -r ~{refFasta} -pf ~{outputFileNamePrefix} -o ~{outdir} ~{removeFlag}
   >>>
 
