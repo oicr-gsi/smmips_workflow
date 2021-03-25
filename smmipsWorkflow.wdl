@@ -58,7 +58,7 @@ workflow smmipsQC {
         url: "https://pypi.org/project/smmips/"
       },
       {
-        name: "smmipRegionFinder/1.0",
+        name: "smmip-region-finder/1.0",
         url: "https://github.com/oicr-gsi/smmipRegionFinder"
       }
     ]
