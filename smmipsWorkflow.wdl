@@ -91,7 +91,7 @@ workflow smmipsQC {
       distance = distance
   }
 
-  coordinates = findRegions.coordinates
+  Array coordinates = findRegions.coordinates
 
   scatter(region in coordinates) {
     call assignSmmips {
