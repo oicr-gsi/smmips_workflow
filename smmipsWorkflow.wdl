@@ -303,8 +303,6 @@ task merge {
 
   command <<<
     set -euo pipefail
-    cp ~{refFai} .
-    cp ~{refDict} .
     smmips merge -o ~{outdir} ~{removeFlag}
   >>>
 
