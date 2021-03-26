@@ -197,26 +197,18 @@ task assignSmmips {
   }
 
   output {
-  File extractionMetrics = "${outdir}/stats/${outputFileNamePrefix}_extraction_metrics.json"
-  File readCounts = "${outdir}/stats/${outputFileNamePrefix}_smmip_counts.json"
-  File sortedbam = "${outdir}/out/${outputFileNamePrefix}.sorted.bam"
-  File sortedbamIndex = "${outdir}/out/${outputFileNamePrefix}.sorted.bam.bai"
-  File assignedBam = "${outdir}/out/${outputFileNamePrefix}.assigned_reads.sorted.bam"
-  File assignedBamIndex = "${outdir}/out/${outputFileNamePrefix}.assigned_reads.sorted.bam.bai"
-  File unassignedBam = "${outdir}/out/${outputFileNamePrefix}.unassigned_reads.sorted.bam"
-  File unassignedBamIndex = "${outdir}/out/${outputFileNamePrefix}.unassigned_reads.sorted.bam.bai"
-  File emptyBam = "${outdir}/out/${outputFileNamePrefix}.empty_reads.sorted.bam"
-  File emptyBamIndex = "${outdir}/out/${outputFileNamePrefix}.empty_reads.sorted.bam.bai"
+  File extractionMetrics = "${outdir}/stats/${outputFileNamePrefix}_temp.${chromosome}.${start}.${end}.extraction_metrics.json"
+  File readCounts = "${outdir}/stats/${outputFileNamePrefix}_temp.${chromosome}.${start}.${end}.smmip_counts.json"
+  File assignedBam = "${outdir}/out/${outputFileNamePrefix}.${chromosome}.${start}.${end}.temp.assigned_reads.sorted.bam"
+  File assignedBamIndex = "${outdir}/out/${outputFileNamePrefix}.${chromosome}.${start}.${end}.temp.assigned_reads.sorted.bam.bai"
+  File emptyBam = "${outdir}/out/${outputFileNamePrefix}.${chromosome}.${start}.${end}.temp.empty_reads.sorted.bam"
+  File emptyBamIndex = "${outdir}/out/${outputFileNamePrefix}.${chromosome}.${start}.${end}.temp.empty_reads.sorted.bam.bai"
   }
 
   meta {
     output_meta: {
-      sortedbam: "Alignments of reads containing UMIs in paired input fastqs",
-      sortedbamIndex: "Index file of aligned reads containing UMIs",
       assignedBam: "Alignment of reads assigned to smMIPs. Reads are tagged with smMIP and UMI",
       assignedBamIndex: "Index file of aligned and assigned reads",
-      unassignedBam: "Alignment of reads that cannot be assigned to smMIPs",
-      unassignedBamIndex: "Index file of aligned but unassigned reads",
       emptyBam: "Alignment of reads assigned to smMIPs but missing target capture",
       emptyBamIndex: "Index file of reads with empty smMIPs",
       extractionMetrics: "Json file with read counts",
