@@ -84,27 +84,47 @@ workflow smmipsQC {
    File sortedbam = align.sortedbam
    File sortedbamIndex = align.sortedbamIndex
 
-  call assignSmmips {
+
+  call findRegions {
     input:
-      sortedbam = sortedbam,
-      sortedbamIndex = sortedbamIndex,
       panel = panel,
-      outdir = outdir,
-      outputFileNamePrefix = outputFileNamePrefix,  
-      maxSubs = maxSubs,
-      upstreamNucleotides = upstreamNucleotides,
-      umiLength = umiLength, 
-      match = match,
-      mismatch = mismatch,
-      gapOpening = gapOpening,
-      gapExtension = gapExtension,  
-      alignmentOverlapThreshold = alignmentOverlapThreshold,
-      matchesThreshold = matchesThreshold,
-      remove = removeIntermediate,
-      chromosome = chromosome,
-      start = start,
-      end = end
+      distance = distance
   }
+
+  coordinates = findRegions.coordinates
+
+  scatter(region in coordinates) {
+    call assignSmmips {
+      input:
+        sortedbam = sortedbam,
+        sortedbamIndex = sortedbamIndex,
+        panel = panel,
+        outdir = outdir,
+        outputFileNamePrefix = outputFileNamePrefix,  
+        maxSubs = maxSubs,
+        upstreamNucleotides = upstreamNucleotides,
+        umiLength = umiLength, 
+        match = match,
+        mismatch = mismatch,
+        gapOpening = gapOpening,
+        gapExtension = gapExtension,  
+        alignmentOverlapThreshold = alignmentOverlapThreshold,
+        matchesThreshold = matchesThreshold,
+        remove = removeIntermediate,
+        chromosome = region[0],
+        start = region[1],
+        end = region[2]
+    }
+  }
+
+
+  call merge {
+    input:
+      outdir = outdir,    
+      remove = removeIntermediate,
+      outputFileNamePrefix = outputFileNamePrefix
+  }
+
 
   output {
     File outputExtractionMetrics = assignSmmips.extractionMetrics
@@ -313,12 +333,12 @@ task merge {
 
   meta {
     output_meta: {
-      sortedbam: "Alignments of reads containing UMIs in paired input fastqs",
-      sortedbamIndex: "Index file of aligned reads containing UMIs"
       extractionMetrics: "Metrics file with extracted read counts",
       readCounts: "Metric file with read counts for each smmip",
       emptyBam: "Alignment file with empty reads",
       emptyBamIndex: "Index file of the alignment file with empty reads",
+      assignedBam: "Alignment of reads assigned to smMIPs. Reads are tagged with smMIP and UMI",
+      assignedBamIndex: "Index file of aligned and assigned reads"
     }
   }
 }
@@ -327,7 +347,7 @@ task merge {
 
 task findRegions {
   input {
-    String modules = "smmipRegionFinder/1.0"
+    String modules = "smmip-region-finder/1.0"
     Int memory = 32
     Int timeout = 36
     String panel    
