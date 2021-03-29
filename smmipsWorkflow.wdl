@@ -54,7 +54,7 @@ workflow smmipsQC {
         url: "https://www.python.org/downloads/"
       },
       {
-        name: "smmips/1.0.3",
+        name: "smmips/1.0.4",
         url: "https://pypi.org/project/smmips/"
       },
       {
@@ -88,12 +88,19 @@ workflow smmipsQC {
   call findRegions {
     input:
       panel = panel,
-      distance = distance
+      distance = distance,
+      outdir = outdir
   }
 
-  Array coordinates = findRegions.coordinates
 
-  scatter(region in coordinates) {
+  File regions = findRegions.regions
+
+  call regionsToArray {
+    input:
+      regions = regions
+  }
+
+  scatter(region in regionsToArray.out) {
     call assignSmmips {
       input:
         sortedbam = sortedbam,
@@ -111,9 +118,7 @@ workflow smmipsQC {
         alignmentOverlapThreshold = alignmentOverlapThreshold,
         matchesThreshold = matchesThreshold,
         remove = removeIntermediate,
-        chromosome = region[0],
-        start = region[1],
-        end = region[2]
+        region = region
     }
   }
 
@@ -127,15 +132,15 @@ workflow smmipsQC {
 
 
   output {
-    File outputExtractionMetrics = assignSmmips.extractionMetrics
-    File outputReadCounts = assignSmmips.readCounts
+    File outputExtractionMetrics = merge.extractionMetrics
+    File outputReadCounts = merge.readCounts
   }
 }
 
 
 task assignSmmips {
   input {
-    String modules = "smmips/1.0.3"
+    String modules = "smmips/1.0.4"
     Int memory = 32
     Int timeout = 36
     File sortedbam
@@ -153,9 +158,7 @@ task assignSmmips {
     Int alignmentOverlapThreshold = 60
     Float matchesThreshold = 0.7  
     Boolean remove
-    String chromosome
-    Int start
-    Int end
+    String region
   }
 
   
@@ -178,16 +181,14 @@ task assignSmmips {
     alignmentOverlapThreshold: "Cut-off value for the length of the de-gapped overlap between read1 and read2"
     matchesThreshold: "Cut-off value for the number of matching pos"
     remove: "Remove intermediate files if True"
-    chromosome: "Chromomosome where reads are mapped"
-    start: "Start position of region on chromosome"
-    end: "End position of region on chromosome"
+    region: "Genomic region with grouped smmips"
   }
 
   String removeFlag = if remove then "--remove" else ""
 
   command <<<
     set -euo pipefail
-    smmips assign -b ~{sortedbam} -pa ~{panel} -pf ~{outputFileNamePrefix} -ms ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength}  -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension}  -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} -o ~{outdir} -c ~{chromosome} -s ~{start} -e ~{end} ~{removeFlag}
+    smmips assign -b ~{sortedbam} -pa ~{panel} -pf ~{outputFileNamePrefix} -ms ~{maxSubs} -up ~{upstreamNucleotides} -umi ~{umiLength}  -m ~{match} -mm ~{mismatch} -go ~{gapOpening} -ge ~{gapExtension}  -ao ~{alignmentOverlapThreshold} -mt ~{matchesThreshold} -o ~{outdir} -r ~{region} ~{removeFlag}
   >>>
 
   runtime {
@@ -221,7 +222,7 @@ task assignSmmips {
 
 task align {
   input {
-    String modules = "smmips/1.0.3 hg19-bwa-index/0.7.12 bwa/0.7.12"
+    String modules = "smmips/1.0.4 hg19-bwa-index/0.7.12 bwa/0.7.12"
     Int memory = 32
     Int timeout = 36
     File fastq1
@@ -281,7 +282,7 @@ task align {
 
 task merge {
   input {
-    String modules = "smmips/1.0.3"
+    String modules = "smmips/1.0.4"
     Int memory = 32
     Int timeout = 36
     String outdir = "./"    
@@ -342,6 +343,7 @@ task findRegions {
     Int timeout = 36
     String panel    
     Int distance
+    String outdir
   }
 
   parameter_meta {
@@ -350,6 +352,7 @@ task findRegions {
     timeout: "Hours before task timeout"
     panel: "Path to file with smMIP information"
     distance: "Minimum distance between smmips for grouping"
+    outdir: "Output directory of the bed file with region coordinates"
   }
 
   command <<<
@@ -364,14 +367,41 @@ task findRegions {
   }
 
   output {
-  Array coordinates
+  File regions = "${outdir}/smmipRegions_${distance}.bed"
   }
 
   meta {
     output_meta: {
-      coordinates: "Array with coordinates of smmip regions"
+      regions: "Bed file with smmip region coordinates"
     }
   }
 }
 
 
+
+task regionsToArray {
+  input {
+    File regions
+    Int memory = 1
+    Int timeout = 1
+  }
+
+  command <<<
+    cat ~{regions} | sed 's/\t/,/g'
+  >>>
+
+  output {
+    Array[String] out = read_lines(stdout())
+  }
+
+  runtime {
+    memory: "~{memory} GB"
+    timeout: "~{timeout}"
+  }
+
+  parameter_meta {
+    regions: "Bed file with smmip region coordinates"
+    memory: "Memory allocated for this job"
+    timeout: "Hours before task timeout"
+  }
+}
