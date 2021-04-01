@@ -54,7 +54,7 @@ workflow smmipsQC {
         url: "https://www.python.org/downloads/"
       },
       {
-        name: "smmips/1.0.4",
+        name: "smmips/1.0.7",
         url: "https://pypi.org/project/smmips/"
       },
       {
@@ -100,7 +100,9 @@ workflow smmipsQC {
       regions = regions
   }
 
-  scatter(region in regionsToArray.out) {
+  Array[String] genomic_regions = regionsToArray.out
+
+  scatter(region in genomic_regions) {
     call assignSmmips {
       input:
         sortedbam = sortedbam,
@@ -140,7 +142,7 @@ workflow smmipsQC {
 
 task assignSmmips {
   input {
-    String modules = "smmips/1.0.4"
+    String modules = "smmips/1.0.7"
     Int memory = 32
     Int timeout = 36
     File sortedbam
@@ -198,20 +200,12 @@ task assignSmmips {
   }
 
   output {
-  File extractionMetrics = "${outdir}/stats/${outputFileNamePrefix}_temp.${chromosome}.${start}.${end}.extraction_metrics.json"
-  File readCounts = "${outdir}/stats/${outputFileNamePrefix}_temp.${chromosome}.${start}.${end}.smmip_counts.json"
-  File assignedBam = "${outdir}/out/${outputFileNamePrefix}.${chromosome}.${start}.${end}.temp.assigned_reads.sorted.bam"
-  File assignedBamIndex = "${outdir}/out/${outputFileNamePrefix}.${chromosome}.${start}.${end}.temp.assigned_reads.sorted.bam.bai"
-  File emptyBam = "${outdir}/out/${outputFileNamePrefix}.${chromosome}.${start}.${end}.temp.empty_reads.sorted.bam"
-  File emptyBamIndex = "${outdir}/out/${outputFileNamePrefix}.${chromosome}.${start}.${end}.temp.empty_reads.sorted.bam.bai"
+  File extractionMetrics = "${outdir}/stats/${outputFileNamePrefix}_temp.${region}.extraction_metrics.json"
+  File readCounts = "${outdir}/stats/${outputFileNamePrefix}_temp.${region}.smmip_counts.json"
   }
 
   meta {
     output_meta: {
-      assignedBam: "Alignment of reads assigned to smMIPs. Reads are tagged with smMIP and UMI",
-      assignedBamIndex: "Index file of aligned and assigned reads",
-      emptyBam: "Alignment of reads assigned to smMIPs but missing target capture",
-      emptyBamIndex: "Index file of reads with empty smMIPs",
       extractionMetrics: "Json file with read counts",
       readCounts: "Json file with read counts with and without target for each smMIP in the panel"
     }
@@ -222,7 +216,7 @@ task assignSmmips {
 
 task align {
   input {
-    String modules = "smmips/1.0.4 hg19-bwa-index/0.7.12 bwa/0.7.12"
+    String modules = "smmips/1.0.7 hg19-bwa-index/0.7.12 bwa/0.7.12"
     Int memory = 32
     Int timeout = 36
     File fastq1
@@ -282,7 +276,7 @@ task align {
 
 task merge {
   input {
-    String modules = "smmips/1.0.4"
+    String modules = "smmips/1.0.7"
     Int memory = 32
     Int timeout = 36
     String outdir = "./"    
@@ -316,20 +310,12 @@ task merge {
   output {
   File extractionMetrics = "${outdir}/stats/${outputFileNamePrefix}_extraction_metrics.json"
   File readCounts = "${outdir}/stats/${outputFileNamePrefix}_smmip_counts.json"
-  File assignedBam = "${outdir}/out/${outputFileNamePrefix}.assigned_reads.sorted.bam"
-  File assignedBamIndex = "${outdir}/out/${outputFileNamePrefix}.assigned_reads.sorted.bam.bai"
-  File emptyBam = "${outdir}/out/${outputFileNamePrefix}.empty_reads.sorted.bam"
-  File emptyBamIndex = "${outdir}/out/${outputFileNamePrefix}.empty_reads.sorted.bam.bai"
   }
 
   meta {
     output_meta: {
       extractionMetrics: "Metrics file with extracted read counts",
-      readCounts: "Metric file with read counts for each smmip",
-      emptyBam: "Alignment file with empty reads",
-      emptyBamIndex: "Index file of the alignment file with empty reads",
-      assignedBam: "Alignment of reads assigned to smMIPs. Reads are tagged with smMIP and UMI",
-      assignedBamIndex: "Index file of aligned and assigned reads"
+      readCounts: "Metric file with read counts for each smmip"
     }
   }
 }
@@ -357,7 +343,7 @@ task findRegions {
 
   command <<<
     set -euo pipefail
-    smmipRegionFinder -p ~{panel} -d ~{distance}
+    smmipRegionFinder -p ~{panel} -d ~{distance} -o ~{outdir}
   >>>
 
   runtime {
@@ -387,7 +373,7 @@ task regionsToArray {
   }
 
   command <<<
-    cat ~{regions} | sed 's/\t/,/g'
+    cat ~{regions} | sed 's/\t/./g'
   >>>
 
   output {
