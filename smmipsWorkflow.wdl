@@ -65,7 +65,7 @@ workflow smmipsQC {
     
     output_meta: {
     outputExtractionMetrics: "Metrics file with extracted read counts",
-    outputReadCounts: "Metric file with read counts for each smmip",
+    outputReadCounts: "Metric file with read counts for each smmip"
     }
   }
   
