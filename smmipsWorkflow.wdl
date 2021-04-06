@@ -54,7 +54,7 @@ workflow smmipsQC {
         url: "https://www.python.org/downloads/"
       },
       {
-        name: "smmips/1.0.7",
+        name: "smmips/1.0.8",
         url: "https://pypi.org/project/smmips/"
       },
       {
@@ -123,26 +123,34 @@ workflow smmipsQC {
         region = region
     }
   }
-
-
-  call merge {
+  
+  
+  call merge_extraction {
     input:
       outdir = outdir,    
       remove = removeIntermediate,
       outputFileNamePrefix = outputFileNamePrefix
+      stats_json = assignSmmips.extractionMetrics
   }
 
+  call merge_counts {
+    input:
+      outdir = outdir,    
+      remove = removeIntermediate,
+      outputFileNamePrefix = outputFileNamePrefix
+      stats_json = assignSmmips.readCounts
+  }
 
   output {
-    File outputExtractionMetrics = merge.extractionMetrics
-    File outputReadCounts = merge.readCounts
+    File outputExtractionMetrics = merge_extraction.extractionMetrics
+    File outputReadCounts = merge_counts.readCounts
   }
 }
 
 
 task assignSmmips {
   input {
-    String modules = "smmips/1.0.7"
+    String modules = "smmips/1.0.8"
     Int memory = 32
     Int timeout = 36
     File sortedbam
@@ -216,7 +224,7 @@ task assignSmmips {
 
 task align {
   input {
-    String modules = "smmips/1.0.7 hg19-bwa-index/0.7.12 bwa/0.7.12"
+    String modules = "smmips/1.0.8 hg19-bwa-index/0.7.12 bwa/0.7.12"
     Int memory = 32
     Int timeout = 36
     File fastq1
@@ -274,14 +282,15 @@ task align {
 
 
 
-task merge {
+task merge_extraction {
   input {
-    String modules = "smmips/1.0.7"
+    String modules = "smmips/1.0.8"
     Int memory = 32
     Int timeout = 36
-    String outdir = "./"    
     Boolean remove
     String outputFileNamePrefix
+    Array[File] stats_json
+    String outdir = "./"  
   }
 
   
@@ -289,16 +298,17 @@ task merge {
     modules: "Names and versions of modules to load"
     memory: "Memory allocated for this job"
     timeout: "Hours before task timeout"
-    outdir: "Path to directory where directory structure is created"
     remove: "Remove intermediate files if True"
     outputFileNamePrefix: "Prefix used to name the output files"
+    stats_json: "List of files to be merged"
+    outdir: "Path to output directory"
   }
 
   String removeFlag = if remove then "--remove" else ""
 
   command <<<
     set -euo pipefail
-    smmips merge -o ~{outdir} ~{removeFlag}
+    smmips merge -pf ~{outputFileNamePrefix} -ft extraction -t ~{stats_json}  ~{removeFlag}
   >>>
 
   runtime {
@@ -308,18 +318,63 @@ task merge {
   }
 
   output {
-  File extractionMetrics = "${outdir}/stats/${outputFileNamePrefix}_extraction_metrics.json"
-  File readCounts = "${outdir}/stats/${outputFileNamePrefix}_smmip_counts.json"
+  File extractionMetrics = "${outdir}/stats/basename(${outputFileNamePrefix})_extraction_metrics.json"
   }
 
   meta {
     output_meta: {
       extractionMetrics: "Metrics file with extracted read counts",
-      readCounts: "Metric file with read counts for each smmip"
     }
   }
 }
 
+
+
+task merge_counts {
+  input {
+    String modules = "smmips/1.0.8"
+    Int memory = 32
+    Int timeout = 36
+    Boolean remove
+    String outputFileNamePrefix
+    Array[File] stats_json
+    String outdir = "./"  
+  }
+
+  
+  parameter_meta {
+    modules: "Names and versions of modules to load"
+    memory: "Memory allocated for this job"
+    timeout: "Hours before task timeout"
+    remove: "Remove intermediate files if True"
+    outputFileNamePrefix: "Prefix used to name the output files"
+    stats_json: "List of files to be merged"
+    outdir: "Path to outout directory"
+  }
+
+  String removeFlag = if remove then "--remove" else ""
+
+  command <<<
+    set -euo pipefail
+    smmips merge -pf ~{outputFileNamePrefix} -ft counts -t ~{stats_json} ~{removeFlag}
+  >>>
+
+  runtime {
+    memory:  "~{memory} GB"
+    modules: "~{modules}"
+    timeout: "~{timeout}"
+  }
+
+  output {
+  File readCounts = "${outdir}/stats/basename(${outputFileNamePrefix})_smmip_counts.json"
+  }
+
+  meta {
+    output_meta: {
+      readCounts: "Metric file with read counts for each smmip"
+    }
+  }
+}
 
 
 task findRegions {
