@@ -146,8 +146,8 @@ workflow smmipsQC {
   }
 
   output {
-    File outputExtractionMetrics = mergeExtraction.extractionMetrics
-    File outputReadCounts = mergeCounts.readCounts
+    File outputExtractionMetrics = mergeExtraction.mergedExtractionMetrics
+    File outputReadCounts = mergeCounts.mergedReadCounts
   }
 }
 
@@ -323,12 +323,12 @@ task mergeExtraction {
   }
 
   output {
-  File extractionMetrics = "${outputName}_extraction_metrics.json"
+  File mergedExtractionMetrics = "${outputName}_extraction_metrics.json"
   }
 
   meta {
     output_meta: {
-      extractionMetrics: "Metrics file with extracted read counts",
+      mergedExtractionMetrics: "Metrics file with extracted read counts"
     }
   }
 }
@@ -372,12 +372,12 @@ task mergeCounts {
   }
 
   output {
-  File readCounts = "${outputName}_smmip_counts.json"
+  File mergedReadCounts = "${outputName}_smmip_counts.json"
   }
 
   meta {
     output_meta: {
-      readCounts: "Metric file with read counts for each smmip"
+      mergedReadCounts: "Metric file with read counts for each smmip"
     }
   }
 }
