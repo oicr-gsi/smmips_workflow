@@ -68,7 +68,7 @@ workflow smmipsQC {
     outputReadCounts: "Metric file with read counts for each smmip",
     }
   }
-
+  
 
   Boolean removeIntermediate = if remove then true else false
 
@@ -125,25 +125,29 @@ workflow smmipsQC {
   }
   
   
-  call merge_extraction {
+  Array[File] extractionCounts = assignSmmips.extractionMetrics
+  Array[File] readCounts = assignSmmips.readCounts
+  
+  
+  call mergeExtraction {
     input:
       outdir = outdir,    
       remove = removeIntermediate,
-      outputFileNamePrefix = outputFileNamePrefix
-      stats_json = assignSmmips.extractionMetrics
+      outputFileNamePrefix = outputFileNamePrefix,
+      extractionCounts = extractionCounts
   }
 
-  call merge_counts {
+  call mergeCounts {
     input:
       outdir = outdir,    
       remove = removeIntermediate,
-      outputFileNamePrefix = outputFileNamePrefix
-      stats_json = assignSmmips.readCounts
+      outputFileNamePrefix = outputFileNamePrefix,
+      readCounts = readCounts
   }
 
   output {
-    File outputExtractionMetrics = merge_extraction.extractionMetrics
-    File outputReadCounts = merge_counts.readCounts
+    File outputExtractionMetrics = mergeExtraction.extractionMetrics
+    File outputReadCounts = mergeCounts.readCounts
   }
 }
 
@@ -282,14 +286,14 @@ task align {
 
 
 
-task merge_extraction {
+task mergeExtraction {
   input {
     String modules = "smmips/1.0.8"
     Int memory = 32
     Int timeout = 36
     Boolean remove
     String outputFileNamePrefix
-    Array[File] stats_json
+    Array[File] extractionCounts
     String outdir = "./"  
   }
 
@@ -300,15 +304,16 @@ task merge_extraction {
     timeout: "Hours before task timeout"
     remove: "Remove intermediate files if True"
     outputFileNamePrefix: "Prefix used to name the output files"
-    stats_json: "List of files to be merged"
+    extractionCounts: "List of files to be merged"
     outdir: "Path to output directory"
   }
 
   String removeFlag = if remove then "--remove" else ""
+  String outputName = basename(outputFileNamePrefix)
 
   command <<<
     set -euo pipefail
-    smmips merge -pf ~{outputFileNamePrefix} -ft extraction -t ~{stats_json}  ~{removeFlag}
+    smmips merge -pf ~{outputFileNamePrefix} -ft extraction -t ~{sep =" " extractionCounts}  ~{removeFlag}
   >>>
 
   runtime {
@@ -318,7 +323,7 @@ task merge_extraction {
   }
 
   output {
-  File extractionMetrics = "${outdir}/stats/basename(${outputFileNamePrefix})_extraction_metrics.json"
+  File extractionMetrics = "${outputName}_extraction_metrics.json"
   }
 
   meta {
@@ -330,14 +335,14 @@ task merge_extraction {
 
 
 
-task merge_counts {
+task mergeCounts {
   input {
     String modules = "smmips/1.0.8"
     Int memory = 32
     Int timeout = 36
     Boolean remove
     String outputFileNamePrefix
-    Array[File] stats_json
+    Array[File] readCounts
     String outdir = "./"  
   }
 
@@ -348,15 +353,16 @@ task merge_counts {
     timeout: "Hours before task timeout"
     remove: "Remove intermediate files if True"
     outputFileNamePrefix: "Prefix used to name the output files"
-    stats_json: "List of files to be merged"
+    readCounts: "List of files to be merged"
     outdir: "Path to outout directory"
   }
 
   String removeFlag = if remove then "--remove" else ""
+  String outputName = basename(outputFileNamePrefix)
 
   command <<<
     set -euo pipefail
-    smmips merge -pf ~{outputFileNamePrefix} -ft counts -t ~{stats_json} ~{removeFlag}
+    smmips merge -pf ~{outputFileNamePrefix} -ft counts -t ~{sep =" " readCounts} ~{removeFlag}
   >>>
 
   runtime {
@@ -366,7 +372,7 @@ task merge_counts {
   }
 
   output {
-  File readCounts = "${outdir}/stats/basename(${outputFileNamePrefix})_smmip_counts.json"
+  File readCounts = "${outputName}_smmip_counts.json"
   }
 
   meta {
