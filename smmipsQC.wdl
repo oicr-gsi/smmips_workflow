@@ -54,7 +54,7 @@ workflow smmipsQC {
         url: "https://www.python.org/downloads/"
       },
       {
-        name: "smmips/1.0.8",
+        name: "smmips/1.0.9",
         url: "https://pypi.org/project/smmips/"
       },
       {
@@ -154,7 +154,7 @@ workflow smmipsQC {
 
 task assignSmmips {
   input {
-    String modules = "smmips/1.0.8"
+    String modules = "smmips/1.0.9"
     Int memory = 32
     Int timeout = 36
     File sortedbam
@@ -228,7 +228,7 @@ task assignSmmips {
 
 task align {
   input {
-    String modules = "smmips/1.0.8 hg19-bwa-index/0.7.12 bwa/0.7.12"
+    String modules = "smmips/1.0.9 hg19-bwa-index/0.7.12 bwa/0.7.12"
     Int memory = 32
     Int timeout = 36
     File fastq1
@@ -288,7 +288,7 @@ task align {
 
 task mergeExtraction {
   input {
-    String modules = "smmips/1.0.8"
+    String modules = "smmips/1.0.9"
     Int memory = 32
     Int timeout = 36
     Boolean remove
@@ -337,7 +337,7 @@ task mergeExtraction {
 
 task mergeCounts {
   input {
-    String modules = "smmips/1.0.8"
+    String modules = "smmips/1.0.9"
     Int memory = 32
     Int timeout = 36
     Boolean remove
