@@ -10,12 +10,12 @@
         <relativePath/>
     </parent>
 
-    <artifactId>smmipsWorkflow</artifactId>
+    <artifactId>smmipsQC</artifactId>
     <version>1.0.0</version>
 
     <properties>
         <workflow-description>Workflow for analysis of smMIP libraries</workflow-description>
-        <wdl-workflow>smmipsWorkflow.wdl</wdl-workflow>
+        <wdl-workflow>smmipsQC.wdl</wdl-workflow>
         <test-basedir>tests/</test-basedir>
     </properties>
 

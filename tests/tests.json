@@ -2,7 +2,6 @@
   "defaults": {
     "description": "smmips workflow test",
     "metrics_calculate": "calculate.sh",
-    "metrics_compare": "compare.sh",
     "output_metrics_dir": "/.mounts/labs/gsi/testdata/smmipsWorkflow/output_metrics",
     "parameters": {
       "wdl_options": {
@@ -13,82 +12,80 @@
   },
   "tests": [
     {
-      "id": "CBAM_0006_Ly_P_PE_320_TS",
+      "id": "ARCH_200",
       "parameters": {
         "wdl_inputs": {
-          "smmipsWorkflow.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R1.fastq.gz",
-          "smmipsWorkflow.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R2.fastq.gz",
-          "smmipsWorkflow.outputFileNamePrefix": "CBAM_0006_Ly_P_PE_320_TS",
-          "smmipsWorkflow.referenceName": "37",
-          "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CosmicMutantExport.tsv.gz",
-          "smmipsWorkflow.remove": false,
-          "smmipsWorkflow.truncate": false,
-          "smmipsWorkflow.ignoreOrphans": false    
+          "smmipsQC.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R1.fastq.gz",
+          "smmipsQC.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R2.fastq.gz",
+          "smmipsQC.outputFileNamePrefix": "CBAM_0006_Ly_P_PE_320_TS",
+          "smmipsQC.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
+          "smmipsQC.smmipRegions": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_200.bed",
+          "smmipsQC.remove": false
         }
       }
     },
     {
-      "id": "assign_smmips_truncate",
+      "id": "ARCH_500",
       "parameters": {
         "wdl_inputs": {
-          "smmipsWorkflow.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R1.fastq.gz",
-          "smmipsWorkflow.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R2.fastq.gz",
-          "smmipsWorkflow.outputFileNamePrefix": "CBAM_0006_Ly_P_PE_320_TS",
-          "smmipsWorkflow.referenceName": "37",
-          "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CosmicMutantExport.tsv.gz",
-          "smmipsWorkflow.remove": false,
-          "smmipsWorkflow.truncate": true,
-          "smmipsWorkflow.ignoreOrphans": false    
+          "smmipsQC.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R1.fastq.gz",
+          "smmipsQC.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R2.fastq.gz",
+          "smmipsQC.outputFileNamePrefix": "CBAM_0006_Ly_P_PE_320_TS",
+          "smmipsQC.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
+          "smmipsQC.smmipRegions": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_500.bed",
+          "smmipsQC.remove": false
         }
       }
     },
     {
-      "id": "assign_smmips_truncate_ignore_orphans",
+      "id": "ARCH_1000",
       "parameters": {
         "wdl_inputs": {
-          "smmipsWorkflow.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R1.fastq.gz",
-          "smmipsWorkflow.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R2.fastq.gz",
-          "smmipsWorkflow.outputFileNamePrefix": "CBAM_0006_Ly_P_PE_320_TS",
-          "smmipsWorkflow.referenceName": "37",
-          "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CosmicMutantExport.tsv.gz",
-          "smmipsWorkflow.remove": false,
-          "smmipsWorkflow.truncate": true,
-          "smmipsWorkflow.ignoreOrphans": true    
+          "smmipsQC.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R1.fastq.gz",
+          "smmipsQC.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R2.fastq.gz",
+          "smmipsQC.outputFileNamePrefix": "CBAM_0006_Ly_P_PE_320_TS",
+          "smmipsQC.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
+          "smmipsQC.smmipRegions": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_1000.bed",
+          "smmipsQC.remove": false
         }
       }
     },
     {
-      "id": "CHMI_0117_Pb_U_PE_302_TS",
+      "id": "Myeloid_200",
       "parameters": {
         "wdl_inputs": {
-          "smmipsWorkflow.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/SWID_16383863_CHMI_0117_Pb_U_PE_302_TS_B177_000000000-D8CP2_TTCTGGAA-TTAGCCGA_L001_R1_001.fastq.gz",
-          "smmipsWorkflow.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/SWID_16383863_CHMI_0117_Pb_U_PE_302_TS_B177_000000000-D8CP2_TTCTGGAA-TTAGCCGA_L001_R2_001.fastq.gz",
-          "smmipsWorkflow.outputFileNamePrefix": "CHMI_0117_Pb_U_PE_302_TS",
-          "smmipsWorkflow.referenceName": "37",
-          "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CosmicMutantExport.tsv.gz",
-          "smmipsWorkflow.remove": false,
-          "smmipsWorkflow.truncate": false,
-          "smmipsWorkflow.ignoreOrphans": false    
+          "smmipsQC.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0322_Pb_R_PE_301_TS_210209_M06816_0102_000000000-G774J_1_GCTAGCCA-ATGGCATT_R1.fastq.gz",
+          "smmipsQC.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0322_Pb_R_PE_301_TS_210209_M06816_0102_000000000-G774J_1_GCTAGCCA-ATGGCATT_R2.fastq.gz",
+          "smmipsQC.outputFileNamePrefix": "CHMI_0322_Pb_R_PE_301_TS",
+          "smmipsQC.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/Myeloid_smMIPS_panel.txt",
+          "smmipsQC.smmipRegions": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/Myeloid_smMIPS_panel_200.bed",
+          "smmipsQC.remove": false
         }
       }
     },
     {
-      "id": "CHMI_0143_Pb_U_PE_304_TS",
+      "id": "Myeloid_500",
       "parameters": {
         "wdl_inputs": {
-          "smmipsWorkflow.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0143_Pb_U_PE_304_TS_200722_A00469_0112_AHJ5WMDRXX_1_CTAGCCTG-ATGGCATT_R1.fastq.gz",
-          "smmipsWorkflow.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0143_Pb_U_PE_304_TS_200722_A00469_0112_AHJ5WMDRXX_1_CTAGCCTG-ATGGCATT_R2.fastq.gz",
-          "smmipsWorkflow.outputFileNamePrefix": "CHMI_0143_Pb_U_PE_304_TS",
-          "smmipsWorkflow.referenceName": "37",
-          "smmipsWorkflow.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsWorkflow.cosmicFile": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CosmicMutantExport.tsv.gz",
-          "smmipsWorkflow.remove": false,
-          "smmipsWorkflow.truncate": false,
-          "smmipsWorkflow.ignoreOrphans": false    
+          "smmipsQC.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0322_Pb_R_PE_301_TS_210209_M06816_0102_000000000-G774J_1_GCTAGCCA-ATGGCATT_R1.fastq.gz",
+          "smmipsQC.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0322_Pb_R_PE_301_TS_210209_M06816_0102_000000000-G774J_1_GCTAGCCA-ATGGCATT_R2.fastq.gz",
+          "smmipsQC.outputFileNamePrefix": "CHMI_0322_Pb_R_PE_301_TS",
+          "smmipsQC.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/Myeloid_smMIPS_panel.txt",
+          "smmipsQC.smmipRegions": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/Myeloid_smMIPS_panel_500.bed",
+          "smmipsQC.remove": false
+        }
+      }
+    },
+    {
+      "id": "Myeloid_1000",
+      "parameters": {
+        "wdl_inputs": {
+          "smmipsQC.fastq1": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0322_Pb_R_PE_301_TS_210209_M06816_0102_000000000-G774J_1_GCTAGCCA-ATGGCATT_R1.fastq.gz",
+          "smmipsQC.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0322_Pb_R_PE_301_TS_210209_M06816_0102_000000000-G774J_1_GCTAGCCA-ATGGCATT_R2.fastq.gz",
+          "smmipsQC.outputFileNamePrefix": "CHMI_0322_Pb_R_PE_301_TS",
+          "smmipsQC.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/Myeloid_smMIPS_panel.txt",
+          "smmipsQC.smmipRegions": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/Myeloid_smMIPS_panel_1000.bed",
+          "smmipsQC.remove": false
         }
       }
     }

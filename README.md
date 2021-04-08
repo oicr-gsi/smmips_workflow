@@ -1,4 +1,4 @@
-# smmipsWorkflow
+# smmipsQC
 
 Analysis of smMIP libraries
 
@@ -8,14 +8,14 @@ Analysis of smMIP libraries
 
 * [bwa 0.7.12](http://bio-bwa.sourceforge.net/)
 * [python 3.6](https://www.python.org/downloads/)
-* [smmips 1.0.0](https://pypi.org/project/smmips/)
+* [smmips 1.0.9](https://pypi.org/project/smmips/)
 
 
 ## Usage
 
 ### Cromwell
 ```
-java -jar cromwell.jar run smmipsWorkflow.wdl --inputs inputs.json
+java -jar cromwell.jar run smmipsQC.wdl --inputs inputs.json
 ```
 
 ### Inputs
@@ -26,8 +26,8 @@ Parameter|Value|Description
 `fastq1`|File|Path to Fastq1
 `fastq2`|File|Path to Fastq2
 `panel`|File|Path to file with smMIP information
+`smmipRegions`|File|Path to bed file with smmip regions
 `outputFileNamePrefix`|String|Prefix used to name the output files
-`cosmicFile`|File|Tab separated table of all COSMIC coding point mutations from targeted and genome wide screens
 
 
 #### Optional workflow parameters:
@@ -44,26 +44,29 @@ Parameter|Value|Default|Description
 `alignmentOverlapThreshold`|Int|60|Cut-off value for the length of the de-gapped overlap between read1 and read2
 `matchesThreshold`|Float|0.7|Cut-off value for the number of matching pos
 `remove`|Boolean|false|Remove intermediate files if True
-`truncate`|Boolean|false|Only pileup columns in the exact region specificied are returned. Default is False
-`stepper`|String|"nofilter"|Filter or include reads in the pileup. See pysam doc for behavior of the all or nofilter options. Default is nofilter
-`maxDepth`|Int|1000000|Maximum read depth. Default is 1000000
-`ignoreOrphans`|Boolean|false|Ignore orphans (paired reads that are not in a proper pair). Default is False
-`referenceName`|String|"37"|Reference genome. Must be the same reference used in panel. Accepted values: 37 or 38
 
 
 #### Optional task parameters:
 Parameter|Value|Default|Description
 ---|---|---|---
-`assignSmmips.modules`|String|"smmips/1.0.0 hg19-bwa-index/0.7.12 bwa/0.7.12"|Names and versions of modules to load
+`align.modules`|String|"smmips/1.0.9 hg19-bwa-index/0.7.12 bwa/0.7.12"|Names and versions of modules to load
+`align.memory`|Int|32|Memory allocated for this job
+`align.timeout`|Int|36|Hours before task timeout
+`align.refFasta`|String|"$HG19_BWA_INDEX_ROOT/hg19_random.fa"|Path to to the reference genome
+`align.refFai`|String|"$HG19_BWA_INDEX_ROOT/hg19_random.fa.fai"|Path to the reference index
+`align.refDict`|String|"$HG19_BWA_INDEX_ROOT/hg19_random.dict"|Path to the reference dictionary
+`align.bwa`|String|"$BWA_ROOT/bin/bwa"|Path to the bwa script
+`regionsToArray.memory`|Int|1|Memory allocated for this job
+`regionsToArray.timeout`|Int|1|Hours before task timeout
+`assignSmmips.modules`|String|"smmips/1.0.9"|Names and versions of modules to load
 `assignSmmips.memory`|Int|32|Memory allocated for this job
 `assignSmmips.timeout`|Int|36|Hours before task timeout
-`assignSmmips.refFasta`|String|"$HG19_BWA_INDEX_ROOT/hg19_random.fa"|Path to to the reference genome
-`assignSmmips.refFai`|String|"$HG19_BWA_INDEX_ROOT/hg19_random.fa.fai"|Path to the reference index
-`assignSmmips.refDict`|String|"$HG19_BWA_INDEX_ROOT/hg19_random.dict"|Path to the reference dictionary
-`assignSmmips.bwa`|String|"$BWA_ROOT/bin/bwa"|Path to the bwa script
-`countVariants.modules`|String|"smmips/1.0.0"|Names and versions of modules to load
-`countVariants.memory`|Int|32|Memory allocated for this job
-`countVariants.timeout`|Int|24|Hours before task timeout
+`mergeExtraction.modules`|String|"smmips/1.0.9"|Names and versions of modules to load
+`mergeExtraction.memory`|Int|32|Memory allocated for this job
+`mergeExtraction.timeout`|Int|36|Hours before task timeout
+`mergeCounts.modules`|String|"smmips/1.0.9"|Names and versions of modules to load
+`mergeCounts.memory`|Int|32|Memory allocated for this job
+`mergeCounts.timeout`|Int|36|Hours before task timeout
 
 
 ### Outputs
@@ -72,15 +75,6 @@ Output | Type | Description
 ---|---|---
 `outputExtractionMetrics`|File|Metrics file with extracted read counts
 `outputReadCounts`|File|Metric file with read counts for each smmip
-`outputSortedbam`|File|Alignment file with all reads
-`outputSortedbamIndex`|File|Index of the alignment file with all reads
-`outputAssignedBam`|File|Alignment file with assigned reads to smmips
-`outputAssignedBamIndex`|File|Index file of the alignment file with assigned reads to smmips
-`outputUnassignedBam`|File|Alignment file with unassigned reads
-`outputUnassignedBamIndex`|File|Index file of the alignment file with unassigned reds
-`outputEmptyBam`|File|Alignment file with empty reads
-`outputEmptyBamIndex`|File|Index file of the alignment file with empty reads
-`outputCountTable`|File|Table with variant counts
 
 
 ## Niassa + Cromwell
