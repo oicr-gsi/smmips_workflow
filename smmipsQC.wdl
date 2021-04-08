@@ -5,6 +5,7 @@ workflow smmipsQC {
     File fastq1
     File fastq2
     File panel
+    File smmipRegions
     String outdir = "./"    
     String outputFileNamePrefix  
     Int maxSubs = 0
@@ -17,7 +18,6 @@ workflow smmipsQC {
     Int alignmentOverlapThreshold = 60
     Float matchesThreshold = 0.7  
     Boolean remove = false
-    Int distance
   }
 
 
@@ -28,6 +28,7 @@ workflow smmipsQC {
     outputFileNamePrefix: "Prefix used to name the output files"
     remove: "Remove intermediate files if True"
     panel: "Path to file with smMIP information"
+    smmipRegions: "Path to bed file with smmip regions"
     upstreamNucleotides: "Maximum number of nucleotides upstream the UMI sequence"
     umiLength: "Length of the UMI"
     maxSubs: "Maximum number of substitutions allowed in the probe sequence"
@@ -37,7 +38,6 @@ workflow smmipsQC {
     gapExtension: "Score for extending an open gap"
     alignmentOverlapThreshold: "Cut-off value for the length of the de-gapped overlap between read1 and read2"
     matchesThreshold: "Cut-off value for the number of matching pos"
-    distance: "Minimum distance between smmips for grouping"
   }
 
   meta {
@@ -56,10 +56,6 @@ workflow smmipsQC {
       {
         name: "smmips/1.0.9",
         url: "https://pypi.org/project/smmips/"
-      },
-      {
-        name: "smmip-region-finder/1.0",
-        url: "https://github.com/oicr-gsi/smmipRegionFinder"
       }
     ]
     
@@ -85,19 +81,9 @@ workflow smmipsQC {
    File sortedbamIndex = align.sortedbamIndex
 
 
-  call findRegions {
-    input:
-      panel = panel,
-      distance = distance,
-      outdir = outdir
-  }
-
-
-  File regions = findRegions.regions
-
   call regionsToArray {
     input:
-      regions = regions
+      regions = smmipRegions
   }
 
   Array[String] genomic_regions = regionsToArray.out
@@ -381,49 +367,6 @@ task mergeCounts {
     }
   }
 }
-
-
-task findRegions {
-  input {
-    String modules = "smmip-region-finder/1.0"
-    Int memory = 32
-    Int timeout = 36
-    String panel    
-    Int distance
-    String outdir
-  }
-
-  parameter_meta {
-    modules: "Names and versions of modules to load"
-    memory: "Memory allocated for this job"
-    timeout: "Hours before task timeout"
-    panel: "Path to file with smMIP information"
-    distance: "Minimum distance between smmips for grouping"
-    outdir: "Output directory of the bed file with region coordinates"
-  }
-
-  command <<<
-    set -euo pipefail
-    smmipRegionFinder -p ~{panel} -d ~{distance} -o ~{outdir}
-  >>>
-
-  runtime {
-    memory:  "~{memory} GB"
-    modules: "~{modules}"
-    timeout: "~{timeout}"
-  }
-
-  output {
-  File regions = "${outdir}/smmipRegions_${distance}.bed"
-  }
-
-  meta {
-    output_meta: {
-      regions: "Bed file with smmip region coordinates"
-    }
-  }
-}
-
 
 
 task regionsToArray {

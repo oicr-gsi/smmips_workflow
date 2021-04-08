@@ -19,8 +19,8 @@
           "smmipsQC.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R2.fastq.gz",
           "smmipsQC.outputFileNamePrefix": "CBAM_0006_Ly_P_PE_320_TS",
           "smmipsQC.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsQC.remove": false,
-          "smmipsQC.distance": 200
+          "smmipsQC.smmipRegions": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_200.bed",
+          "smmipsQC.remove": false
         }
       }
     },
@@ -32,8 +32,8 @@
           "smmipsQC.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R2.fastq.gz",
           "smmipsQC.outputFileNamePrefix": "CBAM_0006_Ly_P_PE_320_TS",
           "smmipsQC.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsQC.remove": false,
-          "smmipsQC.distance": 500    
+          "smmipsQC.smmipRegions": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_500.bed",
+          "smmipsQC.remove": false
         }
       }
     },
@@ -45,8 +45,8 @@
           "smmipsQC.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CBAM_0006_Ly_P_PE_320_TS_test_R2.fastq.gz",
           "smmipsQC.outputFileNamePrefix": "CBAM_0006_Ly_P_PE_320_TS",
           "smmipsQC.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_smMIPs.txt",
-          "smmipsQC.remove": false,
-          "smmipsQC.distance": 1000    
+          "smmipsQC.smmipRegions": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CML_FINAL_ARCH_panel_1000.bed",
+          "smmipsQC.remove": false
         }
       }
     },
@@ -58,8 +58,8 @@
           "smmipsQC.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0322_Pb_R_PE_301_TS_210209_M06816_0102_000000000-G774J_1_GCTAGCCA-ATGGCATT_R2.fastq.gz",
           "smmipsQC.outputFileNamePrefix": "CHMI_0322_Pb_R_PE_301_TS",
           "smmipsQC.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/Myeloid_smMIPS_panel.txt",
-          "smmipsQC.remove": false,
-          "smmipsQC.distance": 200    
+          "smmipsQC.smmipRegions": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/Myeloid_smMIPS_panel_200.bed",
+          "smmipsQC.remove": false
         }
       }
     },
@@ -71,8 +71,8 @@
           "smmipsQC.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0322_Pb_R_PE_301_TS_210209_M06816_0102_000000000-G774J_1_GCTAGCCA-ATGGCATT_R2.fastq.gz",
           "smmipsQC.outputFileNamePrefix": "CHMI_0322_Pb_R_PE_301_TS",
           "smmipsQC.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/Myeloid_smMIPS_panel.txt",
-          "smmipsQC.remove": false,
-          "smmipsQC.distance": 500    
+          "smmipsQC.smmipRegions": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/Myeloid_smMIPS_panel_500.bed",
+          "smmipsQC.remove": false
         }
       }
     },
@@ -84,8 +84,8 @@
           "smmipsQC.fastq2": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/CHMI_0322_Pb_R_PE_301_TS_210209_M06816_0102_000000000-G774J_1_GCTAGCCA-ATGGCATT_R2.fastq.gz",
           "smmipsQC.outputFileNamePrefix": "CHMI_0322_Pb_R_PE_301_TS",
           "smmipsQC.panel": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/Myeloid_smMIPS_panel.txt",
-          "smmipsQC.remove": false,
-          "smmipsQC.distance": 1000    
+          "smmipsQC.smmipRegions": "/.mounts/labs/gsi/testdata/smmipsWorkflow/input_data/Myeloid_smMIPS_panel_1000.bed",
+          "smmipsQC.remove": false
         }
       }
     }
