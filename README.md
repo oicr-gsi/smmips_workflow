@@ -8,15 +8,14 @@ Analysis of smMIP libraries
 
 * [bwa 0.7.12](http://bio-bwa.sourceforge.net/)
 * [python 3.6](https://www.python.org/downloads/)
-* [smmips 1.0.8](https://pypi.org/project/smmips/)
-* [smmip-region-finder 1.0](https://github.com/oicr-gsi/smmipRegionFinder)
+* [smmips 1.0.9](https://pypi.org/project/smmips/)
 
 
 ## Usage
 
 ### Cromwell
 ```
-java -jar cromwell.jar run smmipsWorkflow.wdl --inputs inputs.json
+java -jar cromwell.jar run smmipsQC.wdl --inputs inputs.json
 ```
 
 ### Inputs
@@ -27,8 +26,8 @@ Parameter|Value|Description
 `fastq1`|File|Path to Fastq1
 `fastq2`|File|Path to Fastq2
 `panel`|File|Path to file with smMIP information
+`smmipRegions`|File|Path to bed file with smmip regions
 `outputFileNamePrefix`|String|Prefix used to name the output files
-`distance`|Int|Minimum distance between smmips for grouping
 
 
 #### Optional workflow parameters:
@@ -50,25 +49,22 @@ Parameter|Value|Default|Description
 #### Optional task parameters:
 Parameter|Value|Default|Description
 ---|---|---|---
-`align.modules`|String|"smmips/1.0.8 hg19-bwa-index/0.7.12 bwa/0.7.12"|Names and versions of modules to load
+`align.modules`|String|"smmips/1.0.9 hg19-bwa-index/0.7.12 bwa/0.7.12"|Names and versions of modules to load
 `align.memory`|Int|32|Memory allocated for this job
 `align.timeout`|Int|36|Hours before task timeout
 `align.refFasta`|String|"$HG19_BWA_INDEX_ROOT/hg19_random.fa"|Path to to the reference genome
 `align.refFai`|String|"$HG19_BWA_INDEX_ROOT/hg19_random.fa.fai"|Path to the reference index
 `align.refDict`|String|"$HG19_BWA_INDEX_ROOT/hg19_random.dict"|Path to the reference dictionary
 `align.bwa`|String|"$BWA_ROOT/bin/bwa"|Path to the bwa script
-`findRegions.modules`|String|"smmip-region-finder/1.0"|Names and versions of modules to load
-`findRegions.memory`|Int|32|Memory allocated for this job
-`findRegions.timeout`|Int|36|Hours before task timeout
 `regionsToArray.memory`|Int|1|Memory allocated for this job
 `regionsToArray.timeout`|Int|1|Hours before task timeout
-`assignSmmips.modules`|String|"smmips/1.0.8"|Names and versions of modules to load
+`assignSmmips.modules`|String|"smmips/1.0.9"|Names and versions of modules to load
 `assignSmmips.memory`|Int|32|Memory allocated for this job
 `assignSmmips.timeout`|Int|36|Hours before task timeout
-`mergeExtraction.modules`|String|"smmips/1.0.8"|Names and versions of modules to load
+`mergeExtraction.modules`|String|"smmips/1.0.9"|Names and versions of modules to load
 `mergeExtraction.memory`|Int|32|Memory allocated for this job
 `mergeExtraction.timeout`|Int|36|Hours before task timeout
-`mergeCounts.modules`|String|"smmips/1.0.8"|Names and versions of modules to load
+`mergeCounts.modules`|String|"smmips/1.0.9"|Names and versions of modules to load
 `mergeCounts.memory`|Int|32|Memory allocated for this job
 `mergeCounts.timeout`|Int|36|Hours before task timeout
 
